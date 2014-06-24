@@ -1,0 +1,2431 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Infographics Wizard</title>
+
+<link href="css/infographic.css" rel="stylesheet" />
+
+<!--jQuery UI-->
+<link href="css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+
+<!--Color picker-->
+<link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker.css" />
+
+<!--Scrollbar-->
+<link href="css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css" />
+
+<!--Main Menu-->
+<link href="css/main-menu.css" rel="stylesheet" type="text/css" />
+
+<!--Loading animation-->
+<link href="css/loading-balls.css" rel="stylesheet" type="text/css" />
+
+<!--Icons-->
+<link href="css/glyphicons.css" rel="stylesheet" />
+
+</head>
+
+<body style="background-color:#333">
+
+<nav id="menu-wrap"><div id="menu-trigger">Menu</div>    
+	<ul id="menu">
+		<li><a href="home.html">Home</a></li>
+
+		<li>
+			<a href="javascript:void(0)">Objects</a>
+			<ul>
+            	<li>
+					<a href="javascript:void(0)">Charts</a>
+
+					<ul>
+						<li><a href="">Area Chart</a></li>
+						<li><a href="">Bar Chart</a></li>
+						<li><a href="">Line Chart</a></li>
+						<li><a href="#donut-chart-dialog">Donut Chart</a></li>
+					</ul>				
+				</li>
+				<li>
+					<a href="#countries-dialog" onclick="changeZindex('#svg-container','-1')">Countries</a>				
+				</li>
+
+
+				<li>
+					<a href="#icons-dialog">Icons</a>			
+				</li>
+				<li>
+					<a href="#figures-dialog">Shapes</a>
+                    					
+				</li>
+                <li>
+					<a href="#progress-bars-dialog">Progress Bars</a>
+                    					
+				</li>
+			</ul>
+		</li>
+        <li>
+        	<a href="#text-dialog">Text</a>
+        </li>
+        <li>
+        	<a href="javascript:void(0)">Edit</a>
+            <ul>
+           		<li><a href="javascript:void(0)" onclick="deleteContents()">Delete All</a></li>
+            	<li><a href="javascript:void(0)">Select All</a></li>
+            </ul>
+        </li>
+		<li>
+			<a href="javascript:void(0)">Canvas</a>
+			<ul>
+
+				<li>
+					<a href="javascript:void(0)">Color</a>			
+				</li>
+				<li>
+					<a href="javascript:void(0)">Size</a>
+                    <ul>
+                    	<li>
+                        <a href="javascript:void(0)" style="width:200px;">
+                                 <select style="height:36px;" id="countries-menu" onchange="resizeCanvas(this.value)">
+                                	<option selected value="1100x800">1100x800</option>
+                                    <option value="1280x720">1280x720</option>
+                                    <option value="1920x1080">1920x1080</option>
+                              	</select>
+                                </a>
+                        	</li>	
+                        </ul>		
+				</li>
+
+			</ul>		
+		</li>
+        <li>
+        	<a href="javascript:void(0)">Grid</a>
+            <ul>
+            	<li>
+                <a href="javascript:void(0)">
+              	<input type="checkbox" name="options" class="checkbox" id="show-grid-button" onchange="toggleGrid()" >
+              	Show Grid</a>
+                <ul>
+                	<li><a href="javascript:void(0)">Color</a>
+                    	<ul>
+                        	<li>
+                            	<span style="height:64px; width:64px;">
+                            	<div id="grid-color-picker" class="color-picker"/>
+            					<div style="background-color: #07FFC1;"/>
+                                </span
+                            ></li>
+                        </ul>
+                    </li>
+                    <li><a href="javascript:void(0)">Ticks</a>
+                    	<ul>
+                        	<li>
+                            	<a href="javascript:void(0)" style="width:200px;">
+                            	<select style="height:36px;" id="countries-menu" onchange="drawGrid(this.value)">
+                                	<option value="3">1</option>
+                                    <option value="5">5</option>
+                                    <option selected  value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                              	</select>
+                                </a>
+                            </li>
+                        </ul>
+                    
+                    </li>
+                </ul>
+              </li>
+            </ul>
+        </li>
+		<li><a href="javascript:void(0)">Import</a></li>
+		<li><a href="javascript:void(0)" onclick="exportCanvas()">Export</a></li>
+	</ul>
+</nav>
+
+<!--DIALOGS--> 
+
+<!--Donut chart-->
+
+<div id="donut-chart-dialog" class="modalDialog">
+<div>
+
+<a href="#close" title="Close" class="close">X</a>
+
+<div id="small-menu" style="width:1050px; margin:0 auto; margin-bottom:100px;">
+  <ul style="margin-top:-5px; padding-left:330px; ">
+    <li><a style="border-bottom: 1px solid #07FFC1;" href="javascript:void(0)" onClick="showDataDialog()">Data</a></li>
+    <li><a style="border-bottom: 1px solid #07FFC1;" href="javascript:void(0)" onClick="showRadiusDialog()">Radius</a></li>
+    <li><a style="border-bottom: 1px solid #07FFC1;" href="javascript:void(0)" onClick="showLabelsDialog()">Labels</a></li>
+    <li><a style="border-bottom: 1px solid #07FFC1;" href="javascript:void(0)" onClick="showColorsDialog()">Color</a></li>
+  </ul>
+</div>
+
+<div id="container" style="margin:0 auto; width:1050px;">
+  <div id="piechart-container" style="margin-top: 20px; margin-bottom: 50px">
+    <div class="piechartdiv" id="piechartdiv"></div>
+</div>
+<!--Dialogs-->
+    <div id="data-dialog" title="Data Settings" class="dialog">
+                <div class="btn-group">
+                  <div class="fileinput fileinput-new" data-provides="fileinput">
+                    <div class="input-group">
+                      <input id="input-file" type="file" name="..." onChange="updateChart()">
+<a id="csv-upload" href="#" class="btnz" data-dismiss="fileinput" onClick="clearChart()">Remove</a> </div>
+                    <button type="button" class="btnz" onClick="updateChart()" style="margin-top:10px; margin-bottom:10px">Generate Chart</button>
+                  </div>
+                </div>
+            </div>
+
+
+     
+     <div id="radius-dialog" title="Radius Settings" class="dialog">
+            <div class="row">
+              <div class="col-lg-6">
+                <p>Inner Radius</p>
+                <div id="inner-radius-slider"></div>
+              </div>
+              <div class="col-lg-6">
+                <p>Outer Radius</p>
+                <div id="outer-radius-slider"></div>
+              </div>
+            </div>
+     </div>
+     
+     <div id="labels-dialog" title="Label Settings" class="dialog">
+        <p>Hide Outer Labels</p>
+        <input type="checkbox" onClick="charts.chart.Piechart.Generate.DisplayOuterLabels(this.checked)" >     
+     </div> 
+         
+     <div id="colors-dialog" title="Color Settings" class="dialog">
+            <div class="col-lg-6" style="margin-top: 20px; margin-bottom: 50px">
+              <h3>Color sets</h3>
+              <div class="row">
+                <div class="col-xs-6 col-md-4"> <a  class="thumbnail" onClick="charts.chart.Piechart.Generate.UpdateColor('colorset',undefined,undefined,
+            ['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00'])"
+            > <img src="images/piechart-colorset1-thumbnail.png" > </a> </div>
+                <div class="col-xs-6 col-md-4"> <a  class="thumbnail" onClick="charts.chart.Piechart.Generate.UpdateColor('colorset',undefined,undefined,
+            ['#153450','#294052','#447294','#8FBCDB','#F4D6BC','#F8E4CC'])"
+            > <img src="images/piechart-colorset2-thumbnail.png" > </a> </div>
+                <div class="col-xs-6 col-md-4"> <a  class="thumbnail" onClick="charts.chart.Piechart.Generate.UpdateColor('colorset',undefined,undefined,
+            ['#A31E39','#485C5A','#8C9C9A','#9DB2B1','#BFCFCC','#D6E4E1'])"
+            > <img src="images/piechart-colorset3-thumbnail.png" > </a> </div>
+              </div>
+            </div>
+            <div class="col-lg-6" style="margin-top: 20px; margin-bottom: 50px">
+              <h3>Color gradient</h3>
+              <p style="margin-top:10px">Start Color</p>
+                <span style="height:64px; width:64px;">
+  				<div id="gradient-startcolor-picker" class="color-picker">
+  				<div style="background-color: #07FFC1;">
+                </div>
+                </div>
+                </span>
+              <p style="margin-top:10px">End Color</p>
+                <span style="height:64px; width:64px;">
+  				<div id="gradient-endcolor-picker" class="color-picker">
+  				<div style="background-color: #07FFC1;">
+                </div>
+                </div>
+                </span>
+            </div>   
+     </div>
+</div>
+<button type="button" class="btn btn-default" onclick="addDonutChart()" style="margin-top:10px; margin-bottom:10px">Add To Canvas</button>
+</div>
+</div>
+
+<!--Text-->
+<div id="text-dialog" class="modalDialog" >
+
+<div>
+
+<a href="#close" title="Close" class="close">X</a>
+
+<textarea class="ckeditor" name="textEditor" id="textEditor" rows="10" cols="80"></textarea>
+<button type="button" class="btn btn-default" onclick="addText()" style="margin-top:10px; margin-bottom:10px">Add To Canvas</button>
+</div>
+
+
+</div>
+
+<!--Icons-->
+<div id="icons-dialog" class="modalDialog">
+	<div>
+    
+    	<a href="#close" title="Close" class="close">X</a>
+            <h2>Add some icons</h2>
+    <p>Choose icons from the list and style them. When finished click add to add the group to the canvas.</p>
+    <table id="icons-settings-table">
+    	<tr>
+        	<th width="400px">Size</th>
+            <th width="100px">Color</th>
+            <th width="200px">Margin</th>
+        </tr>
+        <tr>
+        	<td><div id="icons-size-slider"></div></td>
+            <td align="center"><div id="icon-color-picker" class="color-picker">
+            <div style="background-color: #07FFC1;"></div>
+          </div></td>
+            <td><div id="icons-margin-slider"></div></td>
+        </tr>
+    </table>
+        <div id="icons-group" style="display: inline-block"></div>
+      <button type="button" onClick="addIconGroup()" style="margin-bottom:20px;">Add To Canvas</button>
+      <button type="button" onClick="removeAllIcons()" style="margin-bottom:20px;" >Remove All</button>
+      <div class="icons-menu">
+        <ul class="icons-menu-list">
+              <a href="javascript:void(0)" onClick="drawIcon('asterisk')">
+              <li> <span class="glyphicon glyphicon-asterisk"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('plus')">
+              <li> <span class="glyphicon glyphicon-plus"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('euro')">
+              <li> <span class="glyphicon glyphicon-euro"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('minus')">
+              <li> <span class="glyphicon glyphicon-minus"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('cloud')">
+              <li> <span class="glyphicon glyphicon-cloud"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('envelope')">
+              <li> <span class="glyphicon glyphicon-envelope"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('pencil')">
+              <li> <span class="glyphicon glyphicon-pencil"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('glass')">
+              <li> <span class="glyphicon glyphicon-glass"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('music')">
+              <li> <span class="glyphicon glyphicon-music"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('search')">
+              <li> <span class="glyphicon glyphicon-search"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('heart')">
+              <li> <span class="glyphicon glyphicon-heart"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('star')">
+              <li> <span class="glyphicon glyphicon-star"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('start-empty')">
+              <li> <span class="glyphicon glyphicon-star-empty"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('user')">
+              <li> <span class="glyphicon glyphicon-user"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('film')">
+              <li> <span class="glyphicon glyphicon-film"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('th-large')">
+              <li> <span class="glyphicon glyphicon-th-large"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('th')">
+              <li> <span class="glyphicon glyphicon-th"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('th-list')">
+              <li> <span class="glyphicon glyphicon-th-list"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('ok')">
+              <li> <span class="glyphicon glyphicon-ok"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('remove')">
+              <li> <span class="glyphicon glyphicon-remove"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('zoom-in')">
+              <li> <span class="glyphicon glyphicon-zoom-in"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('zoom-out')">
+              <li> <span class="glyphicon glyphicon-zoom-out"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('off')">
+              <li> <span class="glyphicon glyphicon-off"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('signal')">
+              <li> <span class="glyphicon glyphicon-signal"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('cog')">
+              <li> <span class="glyphicon glyphicon-cog"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('trash')">
+              <li> <span class="glyphicon glyphicon-trash"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('home')">
+              <li> <span class="glyphicon glyphicon-home"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('file')">
+              <li> <span class="glyphicon glyphicon-file"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('time')">
+              <li> <span class="glyphicon glyphicon-time"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('road')">
+              <li> <span class="glyphicon glyphicon-road"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('download-alt')">
+              <li> <span class="glyphicon glyphicon-download-alt"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('download')">
+              <li> <span class="glyphicon glyphicon-download"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('upload')">
+              <li> <span class="glyphicon glyphicon-upload"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('inbox')">
+              <li> <span class="glyphicon glyphicon-inbox"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('play-circle')">
+              <li> <span class="glyphicon glyphicon-play-circle"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('repeat')">
+              <li> <span class="glyphicon glyphicon-repeat"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('refresh')">
+              <li> <span class="glyphicon glyphicon-refresh"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('list-alt')">
+              <li> <span class="glyphicon glyphicon-list-alt"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('lock')">
+              <li> <span class="glyphicon glyphicon-lock"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('flag')">
+              <li> <span class="glyphicon glyphicon-flag"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('headphones')">
+              <li> <span class="glyphicon glyphicon-headphones"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('volume-off')">
+              <li> <span class="glyphicon glyphicon-volume-off"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('volume-down')">
+              <li> <span class="glyphicon glyphicon-volume-down"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('volume-up')">
+              <li> <span class="glyphicon glyphicon-volume-up"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('qrcode')">
+              <li> <span class="glyphicon glyphicon-qrcode"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('barcode')">
+              <li> <span class="glyphicon glyphicon-barcode"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('tag')">
+              <li> <span class="glyphicon glyphicon-tag"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('tags')">
+              <li> <span class="glyphicon glyphicon-tags"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('book')">
+              <li> <span class="glyphicon glyphicon-book"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('bookmark')">
+              <li> <span class="glyphicon glyphicon-bookmark"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('print')">
+              <li> <span class="glyphicon glyphicon-print"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('camera')">
+              <li> <span class="glyphicon glyphicon-camera"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('font')">
+              <li> <span class="glyphicon glyphicon-font"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('bold')">
+              <li> <span class="glyphicon glyphicon-bold"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('italic')">
+              <li> <span class="glyphicon glyphicon-italic"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('text-height')">
+              <li> <span class="glyphicon glyphicon-text-height"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('text-width')">
+              <li> <span class="glyphicon glyphicon-text-width"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('align-left')">
+              <li> <span class="glyphicon glyphicon-align-left"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('align-center')">
+              <li> <span class="glyphicon glyphicon-align-center"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('align-right')">
+              <li> <span class="glyphicon glyphicon-align-right"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('align-justify')">
+              <li> <span class="glyphicon glyphicon-align-justify"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('list')">
+              <li> <span class="glyphicon glyphicon-list"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('indent-left')">
+              <li> <span class="glyphicon glyphicon-indent-left"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('indent-right')">
+              <li> <span class="glyphicon glyphicon-indent-right"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('facetime-video')">
+              <li> <span class="glyphicon glyphicon-facetime-video"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('picture')">
+              <li> <span class="glyphicon glyphicon-picture"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('map-marker')">
+              <li> <span class="glyphicon glyphicon-map-marker"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('adjust')">
+              <li> <span class="glyphicon glyphicon-adjust"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('tint')">
+              <li> <span class="glyphicon glyphicon-tint"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('edit')">
+              <li> <span class="glyphicon glyphicon-edit"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('share')">
+              <li> <span class="glyphicon glyphicon-share"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('check')">
+              <li> <span class="glyphicon glyphicon-check"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('move')">
+              <li> <span class="glyphicon glyphicon-move"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('step-backward')">
+              <li> <span class="glyphicon glyphicon-step-backward"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('fast-backward')">
+              <li> <span class="glyphicon glyphicon-fast-backward"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('backward')">
+              <li> <span class="glyphicon glyphicon-backward"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('play')">
+              <li> <span class="glyphicon glyphicon-play"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('pause')">
+              <li> <span class="glyphicon glyphicon-pause"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('stop')">
+              <li> <span class="glyphicon glyphicon-stop"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('forward')">
+              <li> <span class="glyphicon glyphicon-forward"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('fast-forward')">
+              <li> <span class="glyphicon glyphicon-fast-forward"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('step-forward')">
+              <li> <span class="glyphicon glyphicon-step-forward"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('eject')">
+              <li> <span class="glyphicon glyphicon-eject"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('chevron-left')">
+              <li> <span class="glyphicon glyphicon-chevron-left"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('chevron-right')">
+              <li> <span class="glyphicon glyphicon-chevron-right"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('plus-sign')">
+              <li> <span class="glyphicon glyphicon-plus-sign"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('minus-sign')">
+              <li> <span class="glyphicon glyphicon-minus-sign"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('remove-sign')">
+              <li> <span class="glyphicon glyphicon-remove-sign"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('ok-sign')">
+              <li> <span class="glyphicon glyphicon-ok-sign"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('question-sign')">
+              <li> <span class="glyphicon glyphicon-question-sign"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('info-sign')">
+              <li> <span class="glyphicon glyphicon-info-sign"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('screenshot')">
+              <li> <span class="glyphicon glyphicon-screenshot"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('remove-circle')">
+              <li> <span class="glyphicon glyphicon-remove-circle"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('ok-circle')">
+              <li> <span class="glyphicon glyphicon-ok-circle"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('ban-circle')">
+              <li> <span class="glyphicon glyphicon-ban-circle"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('arrow-left')">
+              <li> <span class="glyphicon glyphicon-arrow-left"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('arrow-right')">
+              <li> <span class="glyphicon glyphicon-arrow-right"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('arrow-up')">
+              <li> <span class="glyphicon glyphicon-arrow-up"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('arrow-down')">
+              <li> <span class="glyphicon glyphicon-arrow-down"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('share-alt')">
+              <li> <span class="glyphicon glyphicon-share-alt"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('resize-full')">
+              <li> <span class="glyphicon glyphicon-resize-full"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('resize-small')">
+              <li> <span class="glyphicon glyphicon-resize-small"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('exclamation-sign')">
+              <li> <span class="glyphicon glyphicon-exclamation-sign"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('gift')">
+              <li> <span class="glyphicon glyphicon-gift"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('leaf')">
+              <li> <span class="glyphicon glyphicon-leaf"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('fire')">
+              <li> <span class="glyphicon glyphicon-fire"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('eye-open')">
+              <li> <span class="glyphicon glyphicon-eye-open"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('eye-close')">
+              <li> <span class="glyphicon glyphicon-eye-close"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('warning-sign')">
+              <li> <span class="glyphicon glyphicon-warning-sign"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('plane')">
+              <li> <span class="glyphicon glyphicon-plane"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('calendar')">
+              <li> <span class="glyphicon glyphicon-calendar"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('random')">
+              <li> <span class="glyphicon glyphicon-random"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('comment')">
+              <li> <span class="glyphicon glyphicon-comment"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('magnet')">
+              <li> <span class="glyphicon glyphicon-magnet"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('chevron-up')">
+              <li> <span class="glyphicon glyphicon-chevron-up"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('chevron-down')">
+              <li> <span class="glyphicon glyphicon-chevron-down"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('retweet')">
+              <li> <span class="glyphicon glyphicon-retweet"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('shopping-cart')">
+              <li> <span class="glyphicon glyphicon-shopping-cart"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('folder-close')">
+              <li> <span class="glyphicon glyphicon-folder-close"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('folder-open')">
+              <li> <span class="glyphicon glyphicon-folder-open"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('resize-vertical')">
+              <li> <span class="glyphicon glyphicon-resize-vertical"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('resize-horizontal')">
+              <li> <span class="glyphicon glyphicon-resize-horizontal"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('hdd')">
+              <li> <span class="glyphicon glyphicon-hdd"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('bullhorn')">
+              <li> <span class="glyphicon glyphicon-bullhorn"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('bell')">
+              <li> <span class="glyphicon glyphicon-bell"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('certificate')">
+              <li> <span class="glyphicon glyphicon-certificate"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('thumbs-up')">
+              <li> <span class="glyphicon glyphicon-thumbs-up"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('thumbs-down')">
+              <li> <span class="glyphicon glyphicon-thumbs-down"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('hand-right')">
+              <li> <span class="glyphicon glyphicon-hand-right"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('hand-left')">
+              <li> <span class="glyphicon glyphicon-hand-left"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('hand-up')">
+              <li> <span class="glyphicon glyphicon-hand-up"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('hand-down')">
+              <li> <span class="glyphicon glyphicon-hand-down"></span> </li>
+              </a>
+              <li> <span class="glyphicon glyphicon-circle-arrow-right"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('circle-arrow-left')">
+              <li> <span class="glyphicon glyphicon-circle-arrow-left"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('arrow-up')">
+              <li> <span class="glyphicon glyphicon-circle-arrow-up"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('arrow-down')">
+              <li> <span class="glyphicon glyphicon-circle-arrow-down"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('globe')">
+              <li> <span class="glyphicon glyphicon-globe"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('wrench')">
+              <li> <span class="glyphicon glyphicon-wrench"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('tasks')">
+              <li> <span class="glyphicon glyphicon-tasks"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('filter')">
+              <li> <span class="glyphicon glyphicon-filter"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('briefcase')">
+              <li> <span class="glyphicon glyphicon-briefcase"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('fullscreen')">
+              <li> <span class="glyphicon glyphicon-fullscreen"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('dashboard')">
+              <li> <span class="glyphicon glyphicon-dashboard"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('paperclip')">
+              <li> <span class="glyphicon glyphicon-paperclip"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('heart-empty')">
+              <li> <span class="glyphicon glyphicon-heart-empty"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('link')">
+              <li> <span class="glyphicon glyphicon-link"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('phone')">
+              <li> <span class="glyphicon glyphicon-phone"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('pushpin')">
+              <li> <span class="glyphicon glyphicon-pushpin"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('usd')">
+              <li> <span class="glyphicon glyphicon-usd"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('gbp')">
+              <li> <span class="glyphicon glyphicon-gbp"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sort')">
+              <li> <span class="glyphicon glyphicon-sort"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sort-by-alphabet')">
+              <li> <span class="glyphicon glyphicon-sort-by-alphabet"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sort-by-alphabet-alt')">
+              <li> <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sort-by-order')">
+              <li> <span class="glyphicon glyphicon-sort-by-order"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sort-by-order-alt')">
+              <li> <span class="glyphicon glyphicon-sort-by-order-alt"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sort-by-attributes')">
+              <li> <span class="glyphicon glyphicon-sort-by-attributes"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sort-by-attributes-alt')">
+              <li> <span class="glyphicon glyphicon-sort-by-attributes-alt"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('unchecked')">
+              <li> <span class="glyphicon glyphicon-unchecked"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('expand')">
+              <li> <span class="glyphicon glyphicon-expand"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('collapse-down')">
+              <li> <span class="glyphicon glyphicon-collapse-down"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('collapse-up')">
+              <li> <span class="glyphicon glyphicon-collapse-up"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('log-in')">
+              <li> <span class="glyphicon glyphicon-log-in"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('flash')">
+              <li> <span class="glyphicon glyphicon-flash"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('log-out')">
+              <li> <span class="glyphicon glyphicon-log-out"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('new-window')">
+              <li> <span class="glyphicon glyphicon-new-window"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('record')">
+              <li> <span class="glyphicon glyphicon-record"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('save')">
+              <li> <span class="glyphicon glyphicon-save"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('open')">
+              <li> <span class="glyphicon glyphicon-open"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('saved')">
+              <li> <span class="glyphicon glyphicon-saved"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('import')">
+              <li> <span class="glyphicon glyphicon-import"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('export')">
+              <li> <span class="glyphicon glyphicon-export"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('send')">
+              <li> <span class="glyphicon glyphicon-send"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('floppy-disk')">
+              <li> <span class="glyphicon glyphicon-floppy-disk"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('floppy-disk')">
+              <li> <span class="glyphicon glyphicon-floppy-saved"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('floppy-remove')">
+              <li> <span class="glyphicon glyphicon-floppy-remove"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('floppy-save')">
+              <li> <span class="glyphicon glyphicon-floppy-save"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('floppy-open')">
+              <li> <span class="glyphicon glyphicon-floppy-open"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('credit-card')">
+              <li> <span class="glyphicon glyphicon-credit-card"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('transfer')">
+              <li> <span class="glyphicon glyphicon-transfer"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('cutlery')">
+              <li> <span class="glyphicon glyphicon-cutlery"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('header')">
+              <li> <span class="glyphicon glyphicon-header"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('compressed')">
+              <li> <span class="glyphicon glyphicon-compressed"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('earphone')">
+              <li> <span class="glyphicon glyphicon-earphone"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('phone-alt')">
+              <li> <span class="glyphicon glyphicon-phone-alt"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('tower')">
+              <li> <span class="glyphicon glyphicon-tower"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('stats')">
+              <li> <span class="glyphicon glyphicon-stats"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sd-video')">
+              <li> <span class="glyphicon glyphicon-sd-video"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('hd-video')">
+              <li> <span class="glyphicon glyphicon-hd-video"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('subtitles')">
+              <li> <span class="glyphicon glyphicon-subtitles"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sound-stereo')">
+              <li> <span class="glyphicon glyphicon-sound-stereo"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sound-dolby')">
+              <li> <span class="glyphicon glyphicon-sound-dolby"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sound-5-1')">
+              <li> <span class="glyphicon glyphicon-sound-5-1"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sound-6-1')">
+              <li> <span class="glyphicon glyphicon-sound-6-1"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('sound-7-1')">
+              <li> <span class="glyphicon glyphicon-sound-7-1"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('copyright-mark')">
+              <li> <span class="glyphicon glyphicon-copyright-mark"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('registration-mark')">
+              <li> <span class="glyphicon glyphicon-registration-mark"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('cloud-download')">
+              <li> <span class="glyphicon glyphicon-cloud-download"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('cloud-upload')">
+              <li> <span class="glyphicon glyphicon-cloud-upload"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('tree-conifer')">
+              <li> <span class="glyphicon glyphicon-tree-conifer"></span> </li>
+              </a> <a href="javascript:void(0)" onClick="drawIcon('tree-deciduous')">
+              <li> <span class="glyphicon glyphicon-tree-deciduous"></span> </li>
+              </a>
+            </ul>
+       </div>
+    </div>
+</div>
+
+
+<!--Figures-->
+<div id="figures-dialog" class="modalDialog">
+  <div> <a href="#close" title="Close" class="close">X</a>
+    <h2>Add a figure</h2>
+    <p>Choose a shape from the list and style it. You can resize it by dragging the edges. When finished click add to add it to the canvas.</p>
+    <table>
+      <tr>
+        <td><a href="javascript:void(0)" onclick="drawRectangle('FFF')" >Rectangle</a></td>
+        <td><a href="javascript:void(0)"  onclick="drawTriangle('FFF')" >Triangle</a></td>
+        <td><a href="javascript:void(0)" onclick="drawCircle('FFF')" >Circle</a></td>
+        <td><a href="javascript:void(0)"  onclick="drawPolygon('FFF')" >Polygon</a></td>
+      </tr>
+      <tr>
+        <th>Color</th>
+        <th>Text</th>
+      </tr>
+      <tr>
+        <td><div id="figures-color-picker" class="color-picker">
+            <div style="background-color: #FFF;"></div>
+          </div></td>
+        <td> text </td>
+      </tr>
+    </table>
+    <div id="figure-container"></div>
+    <button onclick="addRectangle()">Add To Canvas</button>
+  </div>
+</div>
+
+<!--Countries-->
+<div id="countries-dialog" class="modalDialog">
+  <div> <a href="#close" title="Close" class="close">X</a>
+    <h2>Add a country</h2>
+    <p>Choose a country from the dropdown list and style it. When finished click add to add it to the canvas.</p>
+    <table>
+      <tr>
+        <th>Country </th>
+        <th>Color </th>
+        <th>Scale </th>
+        <th>Opacity </th>
+      </tr>
+      <tr>
+        <td><select id="countries-menu" onchange="drawCountry(this.value)">
+            <option selected>Select</option>
+            <option value="Belgium">Belgium </option>
+            <option value="Brasil">Brasil</option>
+            <option value="Poland">Poland</option>
+            <option value="Thailand">Thailand</option>
+          </select></td>
+        <td><div id="country-color-picker" class="color-picker">
+            <div style="background-color: #07FFC1;"></div>
+          </div></td>
+        <td><select id="country-scale-menu" onChange="changeCountryScale(this.value)">
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="700">700</option>
+            <option value="900">900</option>
+            <option value="1000">1000</option>
+            <option value="2000">2000</option>
+            <option value="3000">3000</option>
+            <option value="4000">4000</option>
+            <option value="5000">5000</option>
+            <option value="10000">10000</option>
+          </select></td>
+        <td><div  style="width:200px;" id="country-opacity-slider"></div></td>
+      </tr>
+    </table>
+    <div id="country-container"></div>
+    <button onclick="addCountry(countryName)">Add To Canvas</button>
+  </div>
+</div>
+</div>
+
+
+<!--Progress Bars-->
+<div id="progress-bars-dialog" class="modalDialog">
+  <div> <a href="#close" title="Close" class="close">X</a>
+    <h3>Group</h3>
+    <table id="bars-group">
+      <tbody>
+        <tr>
+          <td id="bars-group-table-text" style="padding:10px;"></td>
+          <td id="bars-group-table-bar" style="width: 200px;"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <button type="button" class="btn btn-default" onclick="addBarGroup()" style="margin-top:10px; margin-bottom:10px">Add To Canvas</button>
+          <button type="button" class="btn btn-default" onclick="removeAllBars()" style="margin-top:10px; margin-bottom:10px">Remove All</button>
+        </div>
+      </div>
+    </div>
+    <h3>Settings</h3>
+    <div class="row">
+      <div id="progress-bar-tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
+          <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active" role="tab" tabindex="0" aria-controls="tabs-1" aria-labelledby="ui-id-3" aria-selected="true"><a href="#tabs-1" class="ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-3">Type</a></li>
+          <li class="ui-state-default ui-corner-top" role="tab" tabindex="-1" aria-controls="tabs-2" aria-labelledby="ui-id-4" aria-selected="false"><a href="#tabs-2" class="ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-4">Size</a></li>
+          <li class="ui-state-default ui-corner-top" role="tab" tabindex="-1" aria-controls="tabs-3" aria-labelledby="ui-id-5" aria-selected="false"><a href="#tabs-3" class="ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-5">Value</a></li>
+          <li class="ui-state-default ui-corner-top" role="tab" tabindex="-1" aria-controls="tabs-4" aria-labelledby="ui-id-6" aria-selected="false"><a href="#tabs-4" class="ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-6">Color</a></li>
+          <li class="ui-state-default ui-corner-top" role="tab" tabindex="-1" aria-controls="tabs-5" aria-labelledby="ui-id-7" aria-selected="false"><a href="#tabs-5" class="ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-7">Label</a></li>
+          <li class="ui-state-default ui-corner-top" role="tab" tabindex="-1" aria-controls="tabs-6" aria-labelledby="ui-id-8" aria-selected="false"><a href="#tabs-6" class="ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-8">Margin</a></li>
+        </ul>
+        
+        <!-- Tab panes -->
+        
+        <div id="tabs-1" style="margin: 10px; display: block;" aria-labelledby="ui-id-3" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="true" aria-hidden="false">
+          <div class="btn-group" data-toggle="buttons">
+            <label class="btnz btn-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">
+              <input type="radio" name="options" id="normal-bar-btn" onchange="checkBarTypeState()" data-toggle="button">
+              Normal Bar </span></label>
+            <label class="btnz btn-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">
+              <input type="radio" name="options" id="stacked-bar-btn" onchange="checkBarTypeState()" data-toggle="button">
+              Stacked Bar </span></label>
+            <label class="btnz btn-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">
+              <input type="radio" name="options" id="striped-bar-btn" onchange="checkBarTypeState()" data-toggle="button">
+              Striped Bar </span></label>
+          </div>
+        </div>
+        <div id="tabs-2" style="margin: 10px; display: none;" aria-labelledby="ui-id-4" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="false" aria-hidden="true">
+          <div id="bar-size-slider" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false"><a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 31.03448275862069%;"></a></div>
+        </div>
+        <div id="tabs-3" style="margin: 10px; display: none;" aria-labelledby="ui-id-5" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="false" aria-hidden="true">
+          <div id="bar-value1-slider" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false"><a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 80%;"></a></div>
+        </div>
+        <div id="tabs-4" style="margin: 10px; display: none;" aria-labelledby="ui-id-6" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="false" aria-hidden="true">
+          <div id="progress-bar-color-picker" class="color-picker">
+            <div style="background-color: #FFF;"></div>
+          </div>
+        </div>
+        <div id="tabs-5" style="margin: 10px; display: none;" aria-labelledby="ui-id-7" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="false" aria-hidden="true">
+          <h4>Add label</h4>
+          <input id="bar-add-label" type="checkbox" onclick="addBarLabel(this.checked)">
+        </div>
+        <div id="tabs-6" style="margin: 10px; display: none;" aria-labelledby="ui-id-8" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="false" aria-hidden="true">
+          <div id="bar-margin-slider" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false"><a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 4%;"></a></div>
+        </div>
+      </div>
+      <div id="barwizard-bar-table"> </div>
+    </div>
+    <button type="button" class="btn btn-default" onclick="addBarToGroup()" style="margin-top:10px; margin-bottom:10px">Add Bar To Group</button>
+  </div>
+</div>
+</div>
+
+<div id="svg-container">
+	<div id="loading">
+		<div class="ball"></div>
+		<div class="ball1"></div>
+	</div>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> 
+
+<!--D3 Library--> 
+<script src="http://d3js.org/d3.v3.min.js"></script> 
+
+<!--D3 topojson library--> 
+<script src="http://d3js.org/topojson.v1.min.js"></script> 
+
+<!-- Some library for tooltips--> 
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script> 
+
+<!---Custom chart wizard library--> 
+<script src="js/chartwizard-library.js"></script> 
+
+<!--JQuery UI --> 
+<script src="js/jquery-ui-1.10.4.js"></script> 
+
+<!--Text Editor-->
+<script src="ckeditor/ckeditor.js"></script>
+
+<!--HTML to Canvas-->
+<script src="js/html2canvas.js"></script>
+<!--Scrollbar-->
+<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+<!--Color picker--> 
+<script type="text/javascript" src="js/colorpicker.js"></script> 
+<script>
+///////////////////////////////////////////////////INITIALISATIONS/////////////////////////////////////////////////////////
+	//Loading animation
+	$(window).load(function() 
+	{
+		
+     	$('#loading').fadeOut(1000);
+	});
+	
+	$(document).ready(function() {
+		
+		//Draw the main SVG
+		
+		var svg = d3.select("#svg-container").append("svg").attr("id","main-svg");
+			
+
+//Make a group for all contents(countries, charts...  and the background) so that the grid is always on top
+svg.append("g").attr("id","contents");
+
+//Set the background color
+$("#svg-container").css("background-color","black");	
+
+		
+		
+	});
+		//Style the buttons
+  $(function() {
+    $( "input[type=submit], button" )
+      .button()
+      .click(function( event ) {
+        event.preventDefault();
+      });
+  });
+  
+  /////////////////////////////Global Variables//////////
+  	var svgwidth = 1100;
+	var svgheight = 800;
+	
+	
+	//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ CHARTS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$//
+	//Donut Chart//
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////JQUERY UI//////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  
+  $(function() {
+    $( "#outer-radius-slider" ).slider({
+      value:1,
+      min: 0.25,
+      max: 1.25,
+      step: 0.01,
+      slide: function( event, ui ) {
+        $( "#outer-radius-amount" ).val( ui.value );
+							charts.chart.Piechart.Generate.UpdateRadius( $("#inner-radius-slider").slider( "value"),
+															ui.value 
+														  );
+					
+      }
+    });
+    $( "#outer-radius-amount" ).val($( "#outer-radius-slider" ).slider( "value" ) );
+
+  });
+  
+    $(function() {
+    $( "#inner-radius-slider" ).slider({
+      value:80,
+      min: 50,
+      max: 200,
+      step: 1,
+      slide: function( event, ui ) {
+        $( "#inner-radius-amount" ).val( ui.value );
+							charts.chart.Piechart.Generate.UpdateRadius( ui.value ,
+														   $("#outer-radius-slider").slider( "value")
+														  );
+					
+      }
+    });
+    $( "#inner-radius-amount" ).val($( "#inner-radius-slider" ).slider( "value" ) );
+
+  });
+  
+
+  //Dialogs
+  function showDataDialog()
+  {
+	   $( "#data-dialog" ).dialog("open");	
+  }
+  function showRadiusDialog()
+  {
+	  $( "#radius-dialog" ).dialog("open");	
+  }
+  function showLabelsDialog()
+  {
+  	  $( "#labels-dialog" ).dialog("open");	
+  }			
+  function showColorsDialog()
+  {
+  	  $( "#colors-dialog" ).dialog("open");	
+  } 
+  
+  	$('#gradient-startcolor-picker').ColorPicker({
+		//Default value
+	color: '#000',
+	onShow: function (colpkr) {
+		$(colpkr).fadeIn(500);
+		return false;
+	},
+	onHide: function (colpkr) {
+		$(colpkr).fadeOut(500);
+		return false;
+	},
+	onChange: function (hsb, hex, rgb) {
+		//Change color of country
+		charts.chart.Piechart.Generate.UpdateColor('colorgradient',"#" + hex,gradientendcolor);
+		//Update global variable
+		gradientstartcolor = "#" + hex;
+		//Change background of color picker
+		$('#gradient-startcolor-picker div').css('backgroundColor', '#' + hex);
+
+	}
+});
+
+  	$('#gradient-endcolor-picker').ColorPicker({
+		//Default value
+	color: '#000',
+	onShow: function (colpkr) {
+		$(colpkr).fadeIn(500);
+		return false;
+	},
+	onHide: function (colpkr) {
+		$(colpkr).fadeOut(500);
+		return false;
+	},
+	onChange: function (hsb, hex, rgb) {
+		//Change color of country
+		charts.chart.Piechart.Generate.UpdateColor('colorgradient',gradientstartcolor,"#" + hex);
+		//Update global variable
+		gradientendcolor = "#" + hex;
+		//Change background of color picker
+		$('#gradient-endcolor-picker div').css('backgroundColor', '#' + hex);
+
+	}
+});
+ $('#data-dialog').dialog({
+        autoOpen: false,
+        title: 'Import Your Data',
+        modal: false,
+		resizable: false,
+		height: 220,
+		width: 450
+        });
+		
+		$('#radius-dialog').dialog({
+        autoOpen: false,
+        title: 'Radius Settings',
+        modal: false,
+		resizable: false,
+		height: 220,
+		width: 450
+
+        });
+		
+		 $('#labels-dialog').dialog({
+        autoOpen: false,
+        title: 'Label Settings',
+        modal: false,
+		resizable: false,
+		height: 220,
+		width: 450
+        });
+		
+		$('#colors-dialog').dialog({
+        autoOpen: false,
+        title: 'Color Settings',
+        modal: false,
+		resizable: false,
+		height: 380,
+		width: 850
+        });
+		
+
+		//Get the CSV data, then generate the chart as callback
+		charts.getCSV("data2.csv", function(outputdata)
+		{
+			
+			data = outputdata;
+			
+			charts.chart("PieChart");
+        	charts.chart.Piechart("#piechartdiv");
+			charts.chart.Piechart.Generate(data,
+										   $( "#outer-radius-slider" ).slider( "value" ),
+										   $( "#inner-radius-slider" ).slider( "value" )
+										   );
+					   
+			});
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////GLOBAL VARIABLES///////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var gradientstartcolor = '#FFF';
+var gradientendcolor = '#000';
+	
+var donutChartNumber=0;
+
+	///FUNCTIONS////
+function addDonutChart()
+{
+	donutChartNumber++;
+	//Select the donut chartfrom the wizard
+	var donutchartg = d3.select("#donut-chart-svg");
+	
+	var id = ("donutchart-" + donutChartNumber);
+	donutchartg.select("g").attr("id",id);
+	
+	
+		
+		d3.select("#main-svg #contents").select(function() {
+    return this.appendChild(document.getElementById(id).cloneNode(true));
+  		});
+
+
+	//Change the ID back of the donut chart in the wizard now that its cloned
+	donutchartg.select("g").attr("id","donutchart");
+	
+
+		//Make the cloned chart draggable
+		draggableDonutChart(id);
+	
+	
+		
+		//Close the dialog
+		window.location="#close";
+		
+
+		
+}	
+function draggableDonutChart(inputID)
+{
+	var g = d3.select("#" + inputID);
+	
+			//Change the cursor to a move cursor when hovered
+		g.attr("cursor", "move")
+		
+		//Add a drag handler
+	    var drag = d3.behavior.drag()
+        .on("drag", function(d,i) {
+            d.x += d3.event.dx
+            d.y += d3.event.dy
+            d3.select(this).attr("transform", function(d,i){
+                return "translate(" + [ d.x,d.y ] + ")"
+            })
+        });
+		
+var x=110;
+var y =110;
+
+	
+	 g
+	  	.data([ {"x":x, "y":y} ])
+    	.attr("transform", "translate(" + x + "," + y + ")")
+		.call(drag);	
+}
+	
+	function getStartColorGradient()
+	{
+		
+			var color = '#' + document.getElementById("startcolorgradient").value;
+			return color;
+             	
+	}
+	
+	function getEndColorGradient()
+	{
+		
+			var color = '#' + document.getElementById("endcolorgradient").value;
+			return color;
+             	
+	}
+	
+	
+	function ReadCSV()
+	{
+		var stringpath = document.getElementById("input-file").value;	
+		return stringpath.slice(12);
+	}
+		
+	function updateChart()
+	{
+		clearChart();
+		
+		charts.getCSV(ReadCSV(), function(outputdata)
+		{
+			
+			data = outputdata;
+			
+			charts.chart.Piechart.Generate(data,
+										   $( "#outer-radius-slider" ).slider( "value" ),
+										   $( "#inner-radius-slider" ).slider( "value" )
+										   );
+										   
+
+		});
+		
+	}
+	function clearChart()
+	{
+		
+		d3.select(".donutchart-group .slices").remove();
+		d3.select(".donutchart-group .labels").remove();
+		d3.select(".donutchart-group .lines").remove();
+		d3.select("#value-container").style({"display":"none"});
+	}	
+	//COUNTRIES
+	
+////////////////////////////////////////////////     JQUERY     ///////////////////////////////////////////////////////////
+
+	//Color picker widget
+	$('#country-color-picker').ColorPicker({
+		//Default value
+	color: '#07FFC1',
+	onShow: function (colpkr) {
+		$(colpkr).fadeIn(500);
+		return false;
+	},
+	onHide: function (colpkr) {
+		$(colpkr).fadeOut(500);
+		return false;
+	},
+	onChange: function (hsb, hex, rgb) {
+		//Change color of country
+		changeCountryColor((hex));
+		//Change background of color picker
+		$('#country-color-picker div').css('backgroundColor', '#' + hex);
+	}
+});
+
+	$(function() {
+    $( "#country-opacity-slider" ).slider({
+      value:1,
+      min: 0,
+      max: 1,
+      step: 0.01,
+      slide: function( event, ui ) {
+		  $( "#country-opacity-amount" ).val( ui.value );
+							changeCountryOpacity(ui.value);
+					
+      }
+    });
+	$( "#country-opacity-slider" ).val($( "#country-opacity-slider" ).slider( "value" ) );
+
+  });
+
+
+////////////////////////////////////////////////   JAVASCRIPT     /////////////////////////////////////////////////////////
+
+function changeZindex(inputdiv,inputvalue)
+{
+	$(inputdiv).css('z-index', inputvalue);
+}
+
+
+  
+////////////////////////////////////////////////        D3         ////////////////////////////////////////////////////////
+
+//Draw the SVG for the country
+var countrysvg = d3.select("#country-container").append("svg").attr("id","country-svg");
+
+//Global variables and their default values
+var countryName = null;
+
+var countryNumber = 0;
+
+var countryColor = "07FFC1";
+
+var countryOpacity = 1;
+function drawCountry(inputcountry,inputscale,inputcolor)
+{
+		
+		var countryclassname = "country";
+	
+
+	//Set the default value of the color so it's not black
+
+	
+	//Remove the g element, then draw it again so we don't add another one in the wizard
+	countrysvg.select("#country").remove();
+	
+
+	
+	countrysvg.append("g").attr("id", "country");
+	
+	if(inputcountry == "Belgium")
+	{
+			//Set the default value of the inputscale so that you don't see nothing before you changed the scale
+		if(inputscale == null)
+		{
+			inputscale = 7000;	
+		}
+		
+		//Update global variable to define what we have currently selected
+		
+		countryName = "Belgium";
+
+		//Only add country if it wasn't added already
+
+		d3.json("data/countries/belgium.json", function(error,belgium) {
+			
+			
+			var projection = d3.geo.mercator()
+				 .center([4.4, 50.5]).scale(inputscale);
+				 
+				 
+			
+			var path = d3.geo.path()
+				.projection(projection)
+			
+			var country = topojson.feature(belgium, belgium.objects.country);
+
+			  countrysvg.select("#country")
+			  	.append("path")
+			  	.datum(country)
+			  	.attr("d", path)
+			  	.style({"fill":countryColor});
+		
+		});
+
+	}	
+	
+	if(inputcountry == "Brasil")
+	{
+		if(inputscale == null)
+		{
+			inputscale = 800;	
+		}
+		
+		//Update global variable to define what we have currently selected
+		
+		countryName = "Brasil";
+
+		//Only add country if it wasn't added already
+
+		d3.json("data/countries/brasil.json", function(error,brasil) {
+			
+			
+			var projection = d3.geo.mercator()
+				 .center([-51, -10]).scale(inputscale);
+			
+			var path = d3.geo.path()
+				.projection(projection);
+			
+			var country = topojson.feature(brasil, brasil.objects.country);
+			
+					
+			  countrysvg.select("#country")
+			  	.append("path")
+			  	.datum(country)
+			  	.attr("d", path)
+			  	.style({"fill":countryColor});
+		
+		});
+
+	}
+	
+	if(inputcountry == "Poland")
+	{
+		if(inputscale == null)
+		{
+			inputscale = 2000;	
+		}
+		
+		//Update global variable to define what we have currently selected
+		
+		countryName = "Poland";
+
+
+		//Only add country if it wasn't added already
+
+		d3.json("data/countries/poland.json", function(error,poland) {
+			
+			
+			var projection = d3.geo.mercator()
+				 .center([19, 52]).scale(inputscale);
+			
+			var path = d3.geo.path()
+				.projection(projection)
+			
+			var country = topojson.feature(poland, poland.objects.country);
+			
+					
+			  countrysvg.select("#country")
+			  	.append("path")
+			  	.datum(country)
+			  	.attr("d", path)
+			  	.style({"fill":countryColor});
+		
+		});
+
+	}
+	
+	if(inputcountry == "Thailand")
+	{
+		if(inputscale == null)
+		{
+			inputscale = 2000;	
+		}
+		
+		//Update global variable to define what we have currently selected
+		
+		countryName = "Thailand";
+
+		//Only add country if it wasn't added already
+
+		d3.json("data/countries/thailand.json", function(error,thailand) {
+			
+			
+			var projection = d3.geo.mercator()
+				 .center([101, 15]).scale(inputscale);
+			
+			var path = d3.geo.path()
+				.projection(projection)
+			
+			var country = topojson.feature(thailand, thailand.objects.country);
+					
+			  countrysvg.select("#country")
+			  	.append("path")
+			  	.datum(country)
+			  	.attr("d", path)
+			  	.style({"fill":countryColor});
+		
+		});
+
+	}
+
+
+
+
+}
+function changeCountryColor(inputcolor)
+{
+	//Update the global variable
+	
+	countryColor = inputcolor;
+ 	d3.select("#country-svg g path").style({"fill":inputcolor});	
+	
+}
+function changeCountryScale(inputscale)
+{
+	//This actually rescales the whole data and then draws the country again, we can't use a slider because it would 			
+	//overflow the CPU usage(if u got a super slow pc) and make it flicker so a list of scales is all you get
+ 		
+
+		drawCountry(countryName,inputscale,countryColor);
+}
+function changeCountryOpacity(inputopacity)
+{
+	countryOpacity= inputopacity;
+	d3.select("#country-svg g path").style({"opacity":inputopacity});
+	
+}
+
+function addCountry(inputcountry)
+{
+	console.log(countryName);
+	
+	countryNumber++;
+
+	
+	//Give it a unique ID
+	
+	//Make one
+	var id = (inputcountry + "-" + countryNumber);
+	//Select the country in the wizard
+	var countryg = d3.select("#country-svg");
+	//Now give it the new ID
+	countryg.select("g").attr("id",id);
+	
+	//Copy it to the main SVG canvas
+			d3.select("#main-svg #contents").select(function() {
+
+    return this.appendChild(document.getElementById(id).cloneNode(true));
+
+  		});
+		
+	//Change the ID back to country in the wizard now that its cloned
+	//Select the country in the wizard
+	var countryg = d3.select("#country-svg");
+	//Now give it the old ID
+	countryg.select("g").attr("id","country");
+	
+	var countrypath = countryg.select("g");
+		
+		//Make it draggable
+		draggableCountry(id);
+		
+		//Close the dialog
+		window.location="#close";
+		//If u didnt select anything show the warning
+
+	
+	
+}
+
+function draggableCountry(inputID)
+{
+
+	
+		var g = d3.selectAll("#" + inputID);
+		
+		//Change the cursor to a move cursor when hovered
+		g.attr("cursor", "move")
+		
+		//Add a drag handler
+	    var drag = d3.behavior.drag()
+        .on("drag", function(d,i) {
+            d.x += d3.event.dx
+            d.y += d3.event.dy
+            d3.select(this).attr("transform", function(d,i){
+                return "translate(" + [ d.x,d.y ] + ")"
+            })
+        });
+		
+var x=110;
+var y =110;
+
+	
+	 g
+	  	.data([ {"x":x, "y":y} ])
+    	.attr("transform", "translate(" + x + "," + y + ")")
+		.attr("style","z-index: 3")
+		.call(drag);
+		
+		//Change the z-index of the svg container or we won't be able to target it
+		$('#svg-container').css('z-index', '1');
+}
+
+/////////////////////////////////////////////////////  Figures//////////////////////////////////////////////////
+//Javascript///
+
+
+//jQuery UI////
+		//Color picker widget
+	$('#figures-color-picker').ColorPicker({
+		//Default value
+	color: '#FFF',
+	onShow: function (colpkr) {
+		$(colpkr).fadeIn(500);
+		return false;
+	},
+	onHide: function (colpkr) {
+		$(colpkr).fadeOut(500);
+		return false;
+	},
+	onChange: function (hsb, hex, rgb) {
+		//Change color of country
+		changeRectangleColor((hex));
+		//Change background of color picker
+		$('#figures-color-picker div').css('backgroundColor', '#' + hex);
+		//Update global variable that we need for something
+		//barcolor = hex;
+	}
+});
+
+//// D3 /////
+
+//Draw the SVG for the figure
+var figuresvg = d3.select("#figure-container").append("svg").attr("id","figure-svg");
+//Make a group to add all the figures in
+figuresvg.append("g").attr("id","figures-group");
+
+var figureNumber = 0;
+
+function changeRectangleColor(inputcolor)
+{
+	var color = d3.rgb("#" + inputcolor);
+	
+	//Select the last element so we only change the color of that one
+	var rectangle = d3.select( d3.selectAll("#figures-group g")[0].pop());
+	
+	rectangle.select("rect").attr("fill",color);
+}
+
+function addRectangle()
+
+{
+figureNumber++;
+
+	
+	//Give it a unique ID
+	
+	//Make one
+	var id = ("figure" + "-" + figureNumber);
+	//Select the figure in the wizard
+	var figureg = d3.select("#figure-svg");
+	//Now give it the new ID
+	figureg.select("g").attr("id",id);
+	
+	//Copy it to the main SVG canvas
+			d3.select("#main-svg #contents").select(function() {
+
+    return this.appendChild(document.getElementById(id).cloneNode(true));
+
+  		});
+		
+	//Change the ID back to country in the wizard now that its cloned
+	//Select the country in the wizard
+	var figureg = d3.select("#figure-svg");
+	//Now give it the old ID
+	figureg.select("g").attr("id","figures-group");
+		
+		//Remove the other rectangles for the resizing and dragging
+		var draglefts = d3.select("#" + id).selectAll("#dragleft");
+		var dragrights = d3.select("#" + id).selectAll("#dragright");
+		
+		draglefts.remove();
+		dragrights.remove();
+		
+		//Make it draggable
+		draggableFigure(id);
+		
+		//Close the dialog
+		window.location="#close";
+		//If u didnt select anything show the warning
+	
+}
+
+function draggableFigure(inputID)
+{
+		var g = d3.selectAll("#" + inputID);
+			//Change the cursor to a move cursor
+		g.attr("cursor", "move")
+		
+		//Add a drag handler
+	    var drag = d3.behavior.drag()
+        .on("drag", function(d,i) {
+            d.x += d3.event.dx
+            d.y += d3.event.dy
+            d3.select(this).attr("transform", function(d,i){
+                return "translate(" + [ d.x,d.y ] + ")"
+            })
+        });
+		
+var x=110;
+var y =110;
+
+	
+	
+	
+	 g
+	  	.data([ {"x":x, "y":y} ])
+    	.attr("transform", "translate(" + x + "," + y + ")")
+		.attr("style","z-index: 3")
+		.call(drag);
+		
+		//Change the z-index of the svg container or we won't be able to target it
+		$('#svg-container').css('z-index', '1');	
+	
+}
+	
+function drawRectangle(inputColor)
+{
+	
+	maxWidth = document.getElementById("figure-container").offsetWidth;
+	maxHeight = window.innerHeight;
+	
+
+
+
+	 var color = d3.rgb("#" + inputColor);
+	
+var width = 160,
+    height = 90,
+    dragbarw = 20;
+
+var w = maxWidth,
+    h = maxHeight,
+    r = 120;
+	
+var isXChecked = true,
+    isYChecked = true;
+	
+var drag = d3.behavior.drag()
+    .origin(Object)
+    .on("drag", dragmove);
+
+var dragright = d3.behavior.drag()
+    .origin(Object)
+    .on("drag", rdragresize);
+
+var dragleft = d3.behavior.drag()
+    .origin(Object)
+    .on("drag", ldragresize);
+
+var dragtop = d3.behavior.drag()
+    .origin(Object)
+    .on("drag", tdragresize);
+
+var dragbottom = d3.behavior.drag()
+    .origin(Object)
+	    .on("drag", bdragresize);
+	
+var g = d3.select("#figures-group").append("g").data([{x: width / 2, y: height / 2}]);
+
+var dragrect = g.append("rect")
+      .attr("id", "active")
+      .attr("x", function(d) { return d.x; })
+      .attr("y", function(d) { return d.y; })
+      .attr("height", height)
+      .attr("width", width)
+      .attr("fill",color)
+      .attr("cursor", "move")
+      .call(drag);
+	  
+	  
+	  var dragbarleft = g.append("rect")
+      .attr("x", function(d) { return d.x - (dragbarw/2); })
+      .attr("y", function(d) { return d.y + (dragbarw/2); })
+      .attr("height", height - dragbarw)
+      .attr("id", "dragleft")
+      .attr("width", dragbarw)
+      .attr("fill", "lightblue")
+      .attr("fill-opacity", 0)
+      .attr("cursor", "ew-resize")
+      .call(dragleft);
+
+var dragbarright = g.append("rect")
+      .attr("x", function(d) { return d.x + width - (dragbarw/2); })
+      .attr("y", function(d) { return d.y + (dragbarw/2); })
+      .attr("id", "dragright")
+      .attr("height", height - dragbarw)
+      .attr("width", dragbarw)
+      .attr("fill", "lightblue")
+      .attr("fill-opacity", 0)
+      .attr("cursor", "ew-resize")
+      .call(dragright);
+
+var dragbartop = g.append("rect")
+      .attr("x", function(d) { return d.x + (dragbarw/2); })
+      .attr("y", function(d) { return d.y - (dragbarw/2); })
+      .attr("height", dragbarw)
+      .attr("id", "dragleft")
+      .attr("width", width - dragbarw)
+      .attr("fill", "lightgreen")
+      .attr("fill-opacity", 0)
+      .attr("cursor", "ns-resize")
+      .call(dragtop);
+
+var dragbarbottom = g.append("rect")
+      .attr("x", function(d) { return d.x + (dragbarw/2); })
+      .attr("y", function(d) { return d.y + height - (dragbarw/2); })
+      .attr("id", "dragright")
+      .attr("height", dragbarw)
+      .attr("width", width - dragbarw)
+      .attr("fill", "lightgreen")
+      .attr("fill-opacity", 0)
+      .attr("cursor", "ns-resize")
+      .call(dragbottom);
+
+function dragmove(d) {
+  if (isXChecked) {
+      dragrect
+          .attr("x", d.x = Math.max(0, Math.min(w - width, d3.event.x)))
+      dragbarleft 
+          .attr("x", function(d) { return d.x - (dragbarw/2); })
+      dragbarright 
+          .attr("x", function(d) { return d.x + width - (dragbarw/2); })
+      dragbartop 
+          .attr("x", function(d) { return d.x + (dragbarw/2); })
+      dragbarbottom 
+          .attr("x", function(d) { return d.x + (dragbarw/2); })
+  }
+  if (isYChecked) {
+      dragrect
+          .attr("y", d.y = Math.max(0, Math.min(h - height, d3.event.y)));
+      dragbarleft 
+          .attr("y", function(d) { return d.y + (dragbarw/2); });
+      dragbarright 
+          .attr("y", function(d) { return d.y + (dragbarw/2); });
+      dragbartop 
+          .attr("y", function(d) { return d.y - (dragbarw/2); });
+      dragbarbottom 
+          .attr("y", function(d) { return d.y + height - (dragbarw/2); });
+  }
+}
+
+function ldragresize(d) {
+   if (isXChecked) {
+      var oldx = d.x; 
+     //Max x on the right is x + width - dragbarw
+     //Max x on the left is 0 - (dragbarw/2)
+      d.x = Math.max(0, Math.min(d.x + width - (dragbarw / 2), d3.event.x)); 
+      width = width + (oldx - d.x);
+      dragbarleft
+        .attr("x", function(d) { return d.x - (dragbarw / 2); });
+       
+      dragrect
+        .attr("x", function(d) { return d.x; })
+        .attr("width", width);
+
+     dragbartop 
+        .attr("x", function(d) { return d.x + (dragbarw/2); })
+        .attr("width", width - dragbarw)
+     dragbarbottom 
+        .attr("x", function(d) { return d.x + (dragbarw/2); })
+        .attr("width", width - dragbarw)
+  }
+}
+
+function rdragresize(d) {
+   if (isXChecked) {
+     //Max x on the left is x - width 
+     //Max x on the right is width of screen + (dragbarw/2)
+     var dragx = Math.max(d.x + (dragbarw/2), Math.min(w, d.x + width + d3.event.dx));
+
+     //recalculate width
+     width = dragx - d.x;
+
+     //move the right drag handle
+     dragbarright
+        .attr("x", function(d) { return dragx - (dragbarw/2) });
+
+     //resize the drag rectangle
+     //as we are only resizing from the right, the x coordinate does not need to change
+     dragrect
+        .attr("width", width);
+     dragbartop 
+        .attr("width", width - dragbarw)
+     dragbarbottom 
+        .attr("width", width - dragbarw)
+  }
+}
+
+function tdragresize(d) {
+ 
+   if (isYChecked) {
+      var oldy = d.y; 
+     //Max x on the right is x + width - dragbarw
+     //Max x on the left is 0 - (dragbarw/2)
+      d.y = Math.max(0, Math.min(d.y + height - (dragbarw / 2), d3.event.y)); 
+      height = height + (oldy - d.y);
+      dragbartop
+        .attr("y", function(d) { return d.y - (dragbarw / 2); });
+       
+      dragrect
+        .attr("y", function(d) { return d.y; })
+        .attr("height", height);
+
+      dragbarleft 
+        .attr("y", function(d) { return d.y + (dragbarw/2); })
+        .attr("height", height - dragbarw);
+      dragbarright 
+        .attr("y", function(d) { return d.y + (dragbarw/2); })
+        .attr("height", height - dragbarw);
+  }
+}
+
+function bdragresize(d) {
+   if (isYChecked) {
+     //Max x on the left is x - width 
+     //Max x on the right is width of screen + (dragbarw/2)
+     var dragy = Math.max(d.y + (dragbarw/2), Math.min(h, d.y + height + d3.event.dy));
+
+     //recalculate width
+     height = dragy - d.y;
+
+     //move the right drag handle
+     dragbarbottom
+        .attr("y", function(d) { return dragy - (dragbarw/2) });
+
+     //resize the drag rectangle
+     //as we are only resizing from the right, the x coordinate does not need to change
+     dragrect
+        .attr("height", height);
+     dragbarleft 
+        .attr("height", height - dragbarw);
+     dragbarright 
+        .attr("height", height - dragbarw);
+  }
+}
+	
+}
+
+////////////////////////////////////////////////          Icons            //////////////////////////
+//JavaScript///
+function drawIcon(inputicon)
+{
+	
+		d3.select("#icons-group").append("span")
+			.attr("class", "glyphicon glyphicon-" + inputicon)
+			.attr("id","icon")
+			.style({"font-size": "24px" });
+}
+
+function changeIconColor(inputcolor)
+{
+	color = d3.rgb("#" + inputcolor);
+	//Only change the last added one
+	var lastIcon = d3.select( d3.selectAll("#icons-group span")[0].pop());
+	lastIcon.style({"color":color});
+	
+}
+function changeIconSize(inputsize)
+{
+	//Only change the last added one
+	var lastIcon = d3.select( d3.selectAll("#icons-group span")[0].pop());
+	lastIcon.style({"font-size":inputsize + "px"});
+}
+function changeIconsMargin(inputmargin)
+{
+	
+	d3.selectAll("#icons-group span").style({"margin-right":inputmargin + "px"});
+	
+}
+function removeAllIcons()
+{
+		$( "#icons-group span" ).remove();
+}
+
+var iconGroupNumber = 0;
+
+function addIconGroup()
+{
+	
+	iconGroupNumber++;
+	
+	//Select the symbol group from the wizard and clone it
+	var icons = document.getElementById("icons-group").cloneNode(true);
+	
+	//Make a unique ID
+	var id = ("icon-group-" + iconGroupNumber);
+	//Set the ID
+	icons.id=id;
+
+	//Put the cloned symbol group in the SVG container DIV
+	$("#svg-container").prepend(icons);
+
+	//Make it draggable
+				$(function(){
+			$( "#icon-group-" + iconGroupNumber ).draggable({ containment: "#svg-container", scroll: false });
+			});
+	
+	//Change the position so it doesn't push the SVG down
+	$("#icon-group-" + iconGroupNumber).css("position","absolute");
+	
+	//Add a move cursor when hovered over
+	$("#icon-group-" + iconGroupNumber).css("cursor","move");
+
+			//Close the dialog
+		window.location="#close";
+
+}
+///jQuery UI////
+//Scrollbar
+    (function($){
+        $(window).load(function(){
+            $(".icons-menu").mCustomScrollbar();
+        });
+    })(jQuery);
+
+$(function() {
+    $( "#icons-size-slider" ).slider({
+      value:24,
+      min: 8,
+      max: 1000,
+      step: 1,
+      slide: function( event, ui ) {
+							changeIconSize(ui.value);
+					
+      }
+	});
+  });
+        $(function() {
+    $( "#icons-margin-slider" ).slider({
+      value:0,
+      min: 1,
+      max: 100,
+      step: 1,
+      slide: function( event, ui ) {
+							changeIconsMargin(ui.value);
+					
+      }
+    });
+  });
+  		//Color picker widget
+	$('#icon-color-picker').ColorPicker({
+		//Default value
+	color: '#FFF',
+	onShow: function (colpkr) {
+		$(colpkr).fadeIn(500);
+		return false;
+	},
+	onHide: function (colpkr) {
+		$(colpkr).fadeOut(500);
+		return false;
+	},
+	onChange: function (hsb, hex, rgb) {
+		//Change color of country
+		changeIconColor((hex));
+		//Change background of color picker
+		$('#icon-color-picker div').css('backgroundColor', '#' + hex);
+	}
+});
+////// D3 ////
+
+///////////////////////////////////////////////////////Progress Bars/////////////////////////////////
+//Javascript////
+
+
+
+   function checkBarTypeState()
+  {
+	if($("#normal-bar-btn").prop("checked")==true)
+	{
+		console.log("normal bar selected");
+		
+		drawNormalBar();
+						//Set the event handler on the input we just added
+				bindOnChangeEvent();
+		
+	}
+	if($("#stacked-bar-btn").prop("checked")==true)
+	{
+		console.log("stacked bar selected");
+		
+	}
+	if($("#striped-bar-btn").prop("checked")==true)
+	{
+		console.log("striped bar selected");
+	}
+  }
+  function changeBarSize(inputsize)
+  {
+	document.getElementById("barwizard-bar-container").style.width = inputsize + "px";
+	
+	//Also change the size of the cell in the group table
+	document.getElementById("bars-group-table-bar").style.width = inputsize + "px";
+  }
+  
+  function changeBarValue1(inputvalue)
+  {
+	  $("#barwizard-bar-container #progressbar .ui-progressbar-value ").attr("style","width: " + inputvalue + "%");
+  }
+  var barcolor="";
+  function changeBarColor(inputcolor)
+  {
+		//Insert inline style
+		  $("#barwizard-bar-container #progressbar .ui-progressbar-value").css("background","#" + inputcolor);
+
+  }
+  
+  function addBarLabel(inputstate)
+  {
+	  var value = $( "#bar-value1-slider" ).slider( "value" );
+	  
+		  if(inputstate==true)
+		  {
+			$("#barwizard-bar-container #progressbar .ui-progressbar-value").html("<div class='progress-label' style=' position:relative; left:40%; top:4px; font-size:10px;' >" + value + "%" + "</div>" ) ;		  
+		  }
+		  else
+		  {
+			  $("#barwizard-bar-container #progressbar .ui-progressbar-value").html(" ")
+		  }
+  }
+  function addBarToGroup()
+  {
+	  //Get the bar
+	  var bar = $("#barwizard-bar-container").html();
+		//Get the name
+		var  names = $("#barwizard-bar1-text").html();
+	    
+	  //Put bars in column 2
+
+	   $("#bars-group-table-bar").append(bar);
+	  //Put names in column 1
+	  	  $("#bars-group-table-text").append(names);
+	  //Remove the ID from the text so it doesn't change anymore
+	  $("#bars-group #barwizard-bar1-text").removeAttr("id");
+	  //For some weird reason background-color has to be changed to background again 
+	  $("#bars-group #progressbar .ui-progressbar-value").last().css("background","#" + barcolor);
+  }
+  
+var barGroupNumber = 0;
+
+  function addBarGroup()
+  {
+	  	barGroupNumber++;
+	
+	//Select the symbol group from the wizard and clone it
+	var bargroup = document.getElementById("bars-group").cloneNode(true);
+	
+	//Make a unique ID
+	var id = ("bars-group-" + barGroupNumber);
+	//Set the ID
+	bargroup.id=id;
+	
+
+	//Put the cloned symbol group in the SVG container DIV
+	$("#svg-container").prepend(bargroup);
+//		
+//		d3.select("#main-svg").select(function() {
+//    return this.appendChild(document.getElementById(id).cloneNode(true));
+//  		});
+
+	//Make it draggable
+				$(function(){
+			$( "#" + id ).draggable({ containment: "#svg-container", scroll: false });
+			});
+	//Remove the other ID's so they dont change from the wizard
+	$("#" + id + "#bars-group-table-text").removeAttr("id");
+	$("#" + id + "#bars-group-table-bar").removeAttr("id");
+	
+	//Change the position so it doesn't push the SVG down
+	$("#" + id).css("position","absolute");
+	
+	//Add a move cursor when hovered over
+	$("#" + id).css("cursor","move");
+	
+		
+			//Close the dialog
+		window.location="#close";
+		//If u didnt select anything show the warning
+		
+
+  }
+  
+
+  function changeBarGroupMargin(inputvalue)
+  {
+		$("#bars-group #progressbar").css("margin-bottom",inputvalue + "px");
+		$("#bars-group #bars-group-table-text div").css("margin-bottom",inputvalue + "px");
+  }
+  
+//Update the name of the bar when the input changes  
+function bindOnChangeEvent()
+{
+	document.getElementById("barwizard-bar1-input").addEventListener("input", function(e) {
+		
+	document.getElementById("barwizard-bar1-text").childNodes.item(0).innerHTML = document.getElementById("barwizard-bar1-input").value;
+	
+
+		});
+}
+
+function drawNormalBar()
+{
+	
+	$("#barwizard-bar-table").replaceWith('<div id="barwizard-bar-table"> \
+	<table class="table" > \
+<thead> \
+<tr> \
+  <th>Name</th> \
+  <th>Bar</th> \
+</tr> \
+</thead> \
+<tr> \
+<tbody> \
+  <td style="vertical-align:middle; width: 200px"> \
+  	<div class="input-group"> \
+  	<input type="text" id="barwizard-bar1-input" class="form-control" placeholder="Name"> \
+	</div> \
+  </td> \
+  <td style="vertical-align:middle;"> \
+  	<div id="barwizard-bar1-text" style="float: left; margin: 10px 10px 10px 10px;"><div>Name</div> </div> \
+  	<div id="barwizard-bar-container" style="width: 200px; margin: 10px 10px 10px 10px;"> \
+	<div id="progressbar" style="height:20px;"></div> \
+  </td> \
+  </tr> \
+</tbody> \
+</table> \
+</div>\
+');
+
+			//Initiate the jQuery UI
+		$(function() {$( "#progressbar" ).progressbar({value: 37});});
+
+}
+
+
+
+  function removeAllBars()
+  {
+	  $("#bars-group div").remove();
+  }
+  
+///jQuery UI///////
+
+  $(function() {
+    $( "#progress-bar-tabs" ).tabs();
+  });
+
+      $(function() {
+    $( "#bar-value1-slider" ).slider({
+      value:80,
+      min: 0,
+      max: 100,
+      step: 1,
+      slide: function( event, ui ) {
+							changeBarValue1( ui.value );
+							//Update the label value too if the Add Label Checkbox is checked
+							if($("#bar-add-label").is(":checked")==true)
+							{
+								$("#barwizard-bar-container #progressbar .progress-label").html(ui.value + "%");
+							}
+					
+      }
+    });
+  });
+     $(function() {
+    $( "#bar-margin-slider" ).slider({
+      value:2,
+      min: 0,
+      max: 50,
+      step: 1,
+      slide: function( event, ui ) {
+							changeBarGroupMargin( ui.value );
+					
+      }
+    });
+  }); 
+   
+  
+
+  
+    $(function() {
+    $( "#bar-size-slider" ).slider({
+      value:200,
+      min: 100,
+      max: 600,
+      step: 10,
+      slide: function( event, ui ) {
+							changeBarSize( ui.value );
+					
+      }
+    });
+	});
+	
+		//Color picker widget
+	$('#progress-bar-color-picker').ColorPicker({
+		//Default value
+	color: '#000',
+	onShow: function (colpkr) {
+		$(colpkr).fadeIn(500);
+		return false;
+	},
+	onHide: function (colpkr) {
+		$(colpkr).fadeOut(500);
+		return false;
+	},
+	onChange: function (hsb, hex, rgb) {
+		//Change color of country
+		changeBarColor((hex));
+		//Change background of color picker
+		$('#progress-bar-color-picker div').css('backgroundColor', '#' + hex);
+		//Update global variable that we need for something
+		barcolor = hex;
+	}
+});
+
+
+////D3//////
+function addForeignObject(inputhtml)
+{
+	//Wrap all the html in a foreign object element then add it into the svg
+	
+	//var html = $(inputhtml).wrap("foreignObject");
+	//d3.select("#main-svg #contents").append(html);
+}
+
+
+//////////////////////////////////////////////////Canvas ////////////
+////JavaScript////
+function resizeCanvas(inputValues)
+{
+	//Split the inputvalue(0000x0000) into width and height
+	var Height = inputValues.slice(5,9);
+	var Width = inputValues.slice(0,4);
+	
+	//Change the margin to half of the new width
+	$("#svg-container").css("margin-left",-(Width / 2));
+	
+	$("#svg-container").css("width",Width);
+	$("#svg-container").css("height",Height);
+	
+	//Update global variables  	
+	svgwidth = Width;
+	svgheight = Height;
+}
+
+////jQuery///////
+
+
+/////D3/////
+
+///////////////////////////////////////////////// Grid /////////////////////////////////////
+////JavaScript////
+
+function toggleGrid()
+{
+
+	
+	if($("#show-grid-button").prop("checked")==true)
+	{
+		drawGrid(numberOfTicks);
+		
+	}
+	if($("#show-grid-button").prop("checked")==false)
+	{
+		//Remove grid
+		removeGrid();	
+	}
+	
+	
+}
+var gridcolor = "#FFF";
+function changeGridColor(inputcolor)
+{
+	
+	$('#y-grid .tick').css('stroke', '#' + inputcolor);
+	$('#x-grid .tick').css('stroke', '#' + inputcolor);
+	
+	
+}
+
+////jQuery UI////
+		//Color picker widget
+	$('#grid-color-picker').ColorPicker({
+		//Default value
+	color: '#000',
+	onShow: function (colpkr) {
+		$(colpkr).fadeIn(500);
+		return false;
+	},
+	onHide: function (colpkr) {
+		$(colpkr).fadeOut(500);
+		return false;
+	},
+	onChange: function (hsb, hex, rgb) {
+		//Change color of country
+		changeGridColor((hex));
+		//Change background of color picker
+		$('#grid-color-picker div').css('backgroundColor', '#' + hex);
+		//Set a global variable that we need when we turn off or on the grid
+		gridcolor=hex;
+	}
+});
+
+////D3///
+
+//Initial tick value
+var numberOfTicks=10;
+
+function drawGrid(inputTicks){
+	
+	//Remove it first to update the number of ticks
+	removeGrid();
+	
+	
+yScale = d3.scale.linear().domain([0, 100])
+						  .range([0, svgheight]);
+xScale = d3.scale.linear().domain([0, 100])
+						  .range([0, svgwidth]);
+        
+			var svg = d3.select("#main-svg");
+			
+/*What you will see if you go to the D3 API wiki (https://github.com/mbostock/d3/wiki/SVG-Axes#wiki-tickSize) is that for the .tickSize function, the following is the format.
+axis.tickSize([major[​[, minor], end]])
+That tells us that you get to specify the size of the ticks on the axes, by the major ticks, the minor ticks and the end ticks (that is to say the lines on the very end of the graph which in the case of the example we are looking at aren't there!).*/	
+		
+//define X axis
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("bottom")
+    .ticks(10)
+    .tickSize(-svgheight, 0, 0); //Set rough # of ticks
+
+//Define Y axis
+var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left")
+    .ticks(10)
+    .tickSize(-svgwidth, 0, 0);
+	
+//Draw a grid
+	numberOfTicks = inputTicks;
+
+var yAxisGrid = yAxis.ticks(numberOfTicks)
+    .tickSize(svgwidth, 0)
+    .tickFormat("")
+    .orient("right");
+
+var xAxisGrid = xAxis.ticks(numberOfTicks)
+    .tickSize(-svgwidth, 0)
+    .tickFormat("")
+    .orient("top");
+
+svg.append("g")
+    .attr("id","y-grid")
+	.attr("class","grid")
+    .call(yAxisGrid);
+
+svg.append("g")
+    .attr("id","x-grid")
+	.attr("class","grid")
+    .call(xAxisGrid);
+	
+	//Override the css
+	$('#y-grid .tick').css('stroke', gridcolor);
+	$('#x-grid .tick').css('stroke', gridcolor);
+}
+function removeGrid()
+{
+	
+	d3.select("#y-grid").remove();
+	d3.select("#x-grid").remove();	
+}
+
+/////////////////////////////////////////////Export //////////////////////////////
+///JavaScript///
+////////////////////////////////////////////Edit ////////////////////////
+function deleteContents()
+{
+	 $("#svg-container").contents().remove();
+	 //We removed too much now cause need the svg with the <g contents> element back
+	var svg = d3.select("#svg-container").append("svg").attr("id","main-svg");
+	svg.append("g").attr("id","contents");
+}
+function exportCanvas()
+{
+
+}
+
+var textboxNumber = 0;
+
+function addText()
+{
+	textboxNumber++;
+
+	
+	//Make a unique ID
+	var id ="textbox-" + textboxNumber;
+	
+	//Get the text from the rich text editor
+	    var text = CKEDITOR.instances.textEditor.getData();
+		//Wrap it into a div and give it a unique ID
+		text = ("<div id='" + id + "'>" + text + "</div>");
+		
+    $('#svg-container').prepend(text);
+
+	//Make it draggable
+				$(function(){
+			$( "#textbox-" + textboxNumber).draggable({ containment: "#svg-container", scroll: false });
+			});
+			
+	//Make position absolute or it will stretch the window
+	$("#textbox-" + textboxNumber).css("position","absolute");
+			
+				//Add a move cursor when hovered over
+	$("#textbox-" + textboxNumber).css("cursor","move");
+	
+		
+			//Close the dialog
+		window.location="#close";
+
+
+}
+</script>
+</body>
+</html>

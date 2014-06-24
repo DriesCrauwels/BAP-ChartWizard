@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>Line Chart</title>
+
+  <!--CSS for every chart wizard-->
+  <link href="css/charts.css" rel="stylesheet" />
+
+  <!--jQuery UI-->
+  <link href="css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+
+  <!--Scrollbar-->
+  <link href="css/jquery.mCustomScrollbar.css" rel="stylesheet" />
+
+  <!--Main Menu-->
+  <link href="css/main-menu.css" rel="stylesheet" />
+
+  <!--Loading animation-->
+  <link href="css/loading-balls.css" rel="stylesheet" />
+
+  <!--Color picker-->
+  <link href="css/colorpicker.css" rel="stylesheet" />
+
+  <!--Icons-->
+  <link href="css/glyphicons.css" rel="stylesheet" />
+</head>
+
+<body>
+  <nav id="menu-wrap">
+    <div id="menu-trigger">Menu</div>
+    <ul id="menu">
+      <li id="disabled">&nbsp;</li>
+      <li><a href="home.html">Home</a>
+      </li>
+      <li> <a href="#">Charts <b class="caret"></b></a>
+        <ul>
+          <li><a href="areachart.html">Area Chart</a>
+          </li>
+          <li><a href="barchart.html">Bar Chart</a>
+          </li>
+          <li><a href="donutchart.html">Donut Chart</a>
+          </li>
+          <li><a href="#">Bivariate Area Chart</a>
+          </li>
+          <li><a href="#">Grouped Bar Chart</a>
+          </li>
+          <li><a href="linechart.html">Line Chart</a>
+          </li>
+          <li><a href="#">Multi-Line Chart</a>
+          </li>
+          <li><a href="#">Pie Chart</a>
+          </li>
+          <li><a href="#">Scatterplot</a>
+          </li>
+        </ul>
+      </li>
+      <li><a href="infographic.html">Infographics</a>
+      </li>
+      <li><a href="jezuscampraptorravepage.html">Help</a>
+      </li>
+      <li><a href="#about">About</a>
+      </li>
+      <li><a href="#contact">Contact</a>
+      </li>
+  </nav>
+  <div id="small-menu">
+    <ul>
+      <li><a href="#" onClick="showDataDialog()">Data</a>
+      </li>
+      <li><a href="#" onClick="showAxesDialog()">Axes</a>
+      </li>
+      <li><a href="#" onClick="showLineDialog()">Line</a>
+      </li>
+      <li><a href="#" onClick="showColorsDialog()">Color</a>
+      </li>
+      <li><a href="#" onClick="showTextDialog()">Text</a>
+      </li>
+      <li><a href="#" onClick="showExportDialog()">Export</a>
+      </li>
+    </ul>
+  </div>
+
+  <div id="container">
+    <h2 id="linechartTitleID">Line Chart</h2>
+    <div id="linechart-container" style="margin-top: 20px; margin-bottom: 150px">
+      <div class="linechartdiv" id="linechartdiv"></div>
+      <div style="position:absolute; top:400px; left:535px;"> <span id="value"></span> 
+      </div>
+
+    </div>
+    <canvas width="960" height="500" style="display:none"></canvas>
+  </div>
+
+  <div id="data-dialog" title="Data Settings" class="dialog">
+    <div class="btn-group">
+      <div class="fileinput fileinput-new" data-provides="fileinput">
+        <div class="input-group">
+          <input id="input-file" type="file" name="..." onChange="updateChart()">
+          <a id="csv-upload" href="#" class="btnz" data-dismiss="fileinput" onClick="clearChart()">Remove</a> 
+        </div>
+        <button type="button" class="btnz" onClick="updateChart()" style="margin-top:10px; margin-bottom:10px">Generate Chart</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="axes-dialog" title="Axes Settings" class="dialog">
+    <div class="row">
+      <div class="col-lg-6">
+        <p>X Axis Name</p>
+        <input id="xaxis-name" type="text" class="form-input" placeholder="X Axis" onChange="charts.chart.Linechart.Generate.UpdateXaxisName(this.value)"
+        value="Date">
+      </div>
+      <div class="col-lg-6">
+        <p>Y Axis Name</p>
+        <input id="yaxis-name" type="text" class="form-input" placeholder="Y Axis" onChange="charts.chart.Linechart.Generate.UpdateYaxisName(this.value)"
+        value="Value">
+      </div>
+    </div>
+  </div>
+
+  <div id="line-dialog" title="Axes Settings" class="dialog">
+    <h3>Interpolation</h3>Sets the interpolation mode to the specified function. The following named interpolation modes are supported:
+    <div class="btn-group" data-toggle="buttons">
+      <label class="btnz btn-primary">
+        <input type="radio" name="options" id="linear-option-btn" onChange="checkOptionsState()" data-toggle="button">Linear
+      </label>
+      <label class="btnz btn-primary">
+        <input type="radio" name="options" id="step-option-btn" onChange="checkOptionsState()" data-toggle="button">Step
+      </label>
+      <label class="btnz btn-primary">
+        <input type="radio" name="options" id="basis-option-btn" onChange="checkOptionsState()" data-toggle="button">Basis
+      </label>
+      <label class="btnz btn-primary">
+        <input type="radio" name="options" id="bundle-option-btn" onChange="checkOptionsState()" data-toggle="button">Bundle
+      </label>
+      <label class="btnz btn-primary">
+        <input type="radio" name="options" id="cardinal-option-btn" onChange="checkOptionsState()" data-toggle="button">Cardinal
+      </label>
+      <label class="btnz btn-primary">
+        <input type="radio" name="options" id="monotone-option-btn" onChange="checkOptionsState()" data-toggle="button">Monotone
+      </label>
+      <div id="line-options-description">
+        <h3>Description</h3>No interpolation mode selected.
+      </div>
+      <label class="btnz btn-primary">
+        <input type="radio" name="options" id="normal-option-btn" onChange="checkOptionsState()" data-toggle="button">No Interpolation
+      </label>
+    </div>
+  </div>
+
+  <div id="colors-dialog" title="Color Settings" class="dialog">
+    <div class="col-lg-6" style="margin-top: 20px; margin-bottom: 50px">
+      <p>Line Color</p>
+      <span style="height:64px; width:64px;">
+  <div id="line-color-picker" class="color-picker">
+  <div style="background-color: #07FFC1;">
+  </div>
+  </div>
+  </span>
+    </div>
+  </div>
+
+  <div id="text-dialog" title="Text Settings" class="dialog">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <p>Chart Title</p>
+        <input id="chart-title" type="text" value="Line Chart" class="form-input" onChange="UpdateChartTitle(this.value)">
+      </div>
+    </div>
+  </div>
+
+  <div id="export-dialog" title="Export" class="dialog">
+    <button type="button" class="btnz" onClick="GenerateSVG()">Export SVG</button>
+    <button type="button" class="btnz" onClick="GenerateHTML()">Export HTML</button>
+    <button type="button" class="btnz" onClick="GenerateJPEG()">Download PNG</button>
+  </div>
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+  <!--D3 Library-->
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+
+  <!-- Some library for tooltips-->
+  <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+  <!---Custom chart wizard library-->
+  <script src="js/chartwizard-library.js"></script>
+
+  <!--JQuery UI -->
+  <script src="js/jquery-ui-1.10.4.js"></script>
+
+  <!--Color picker-->
+  <script type="text/javascript" src="js/colorpicker.js"></script>
+  <script>
+    
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////INITIALISATIONS////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+  $(document).ready(function ()
+  {
+
+    //Get the CSV data, then generate the chart as callback
+    charts.getCSV("linechartdata2.csv", function (outputdata)
+    {
+
+      data = outputdata;
+
+      document.getElementById("linechartdiv").style.visibility = 'visible';
+
+      charts.chart("LineChart");
+      charts.chart.Linechart("#linechartdiv");
+      charts.chart.Linechart.Generate(data);
+
+    });
+  });    
+     
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////JQUERY UI//////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  $(".btnz").button();
+
+  //Dialogs
+
+  $('#data-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Import Your Data',
+    modal: false,
+    resizable: false,
+    height: 220,
+    width: 450
+  });
+
+  $('#axes-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Axes Settings',
+    modal: false,
+    resizable: false,
+    height: 240,
+    width: 550
+  });
+
+  $('#line-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Line Settings',
+    modal: false,
+    resizable: false,
+    height: 500,
+    width: 740
+  });
+
+
+  $('#colors-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Color Settings',
+    modal: false,
+    resizable: false,
+    height: 180,
+    width: 280
+  });
+
+  $('#text-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Text Settings',
+    modal: false,
+    resizable: false,
+    height: 220,
+    width: 450
+  });
+
+  $('#export-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Export Your Chart',
+    modal: false,
+    resizable: false,
+    height: 220,
+    width: 450
+  });
+
+  function showDataDialog()
+  {
+    $("#data-dialog").dialog("open");
+
+  }
+
+  function showAxesDialog()
+  {
+    $("#axes-dialog").dialog("open");
+
+  }
+
+  function showLineDialog()
+  {
+    $("#line-dialog").dialog("open");
+  }
+
+  function showColorsDialog()
+  {
+    $("#colors-dialog").dialog("open");
+  }
+
+  function showTextDialog()
+  {
+    $("#text-dialog").dialog("open");
+  }
+
+  function showExportDialog()
+  {
+    $("#export-dialog").dialog("open");
+  }
+
+
+  function checkOptionsState()
+  {
+    if ($("#linear-option-btn").prop("checked") == true)
+    {
+      charts.chart.Linechart.Generate.UpdateLine("linear");
+      document.getElementById("line-options-description").innerHTML = (
+        "<h3>Description</h3> Piecewise linear segments, as in a polyline.");
+    }
+    if ($("#step-option-btn").prop("checked") == true)
+    {
+      charts.chart.Linechart.Generate.UpdateLine("step");
+      document.getElementById("line-options-description").innerHTML = (
+        "<h3>Description</h3> Alternate between horizontal and vertical segments, as in a step function.");
+    }
+    if ($("#basis-option-btn").prop("checked") == true)
+    {
+      charts.chart.Linechart.Generate.UpdateLine("basis");
+      document.getElementById("line-options-description").innerHTML = (
+        "<h3>Description</h3> A <a style='color:#99CCFF' target='_blank' href='http://en.wikipedia.org/wiki/B-spline'>B-spline</a>, with control point duplication on the ends."
+      );
+    }
+    if ($("#bundle-option-btn").prop("checked") == true)
+    {
+      charts.chart.Linechart.Generate.UpdateLine("bundle");
+      document.getElementById("line-options-description").innerHTML = (
+        "<h3>Description</h3> Equivalent to basis, except the tension parameter is used to straighten the spline."
+      );
+    }
+    if ($("#cardinal-option-btn").prop("checked") == true)
+    {
+      charts.chart.Linechart.Generate.UpdateLine("cardinal");
+      document.getElementById("line-options-description").innerHTML = (
+        "<h3>Description</h3> A <a style='color:#99CCFF'  target='_blank' href='http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Cardinal_spline'> Cardinal spline</a>, with control point duplication on the ends."
+      );
+
+    }
+    if ($("#monotone-option-btn").prop("checked") == true)
+    {
+      charts.chart.Linechart.Generate.UpdateLine("monotone");
+      document.getElementById("line-options-description").innerHTML = (
+        "<h3>Description</h3> <a style='color:#99CCFF' target='_blank' href='http://en.wikipedia.org/wiki/Monotone_cubic_interpolation'> Cubic interpolation</a> that preserves monotonicity in y."
+      );
+    }
+    if ($("#normal-option-btn").prop("checked") == true)
+    {
+      charts.chart.Linechart.Generate.UpdateLine("none");
+      document.getElementById("line-options-description").innerHTML = (
+        "<h3>Description</h3>No interpolation mode selected.");
+    }
+
+  }
+
+  $('#line-color-picker').ColorPicker(
+  {
+    //Default value
+    color: '#000',
+    onShow: function (colpkr)
+    {
+      $(colpkr).fadeIn(500);
+      return false;
+    },
+    onHide: function (colpkr)
+    {
+      $(colpkr).fadeOut(500);
+      return false;
+    },
+    onChange: function (hsb, hex, rgb)
+    {
+      //Change color of country
+      charts.chart.Linechart.Generate.UpdateLineColor("#" + hex);
+      //Change background of color picker
+      $('#line-color-picker div').css('backgroundColor', '#' + hex);
+
+    }
+  });
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////JAVASCRIPT/////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  function GenerateSVG()
+  {
+    var html = d3.select(".linechart")
+      .attr("title", "linechartdiv")
+      .attr("version", 1.1)
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      .node().parentNode.innerHTML;
+
+    var newwindow = window.open('', 'name', 'height=400,width=1000');
+
+
+
+
+    var newwindowroot = d3.select(newwindow.document.body).append("div")
+      .attr("id", "SVG")
+      .append("img")
+      .attr("src", "data:image/svg+xml;base64," + btoa(html));
+  }
+
+  function GenerateHTML()
+  {
+    var html = d3.select("#linechartdiv")
+      .attr("title", "linechartdiv")
+      .attr("version", 1.1)
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      .node().parentNode.innerHTML;
+
+    var newwindow = window.open('', 'name', 'height=800,width=1100');
+
+    newwindow.document.write(html);
+    newwindow.document.write("<textarea style='width:100%; height:200px;'>");
+    newwindow.document.write(html);
+    newwindow.document.write("</textarea>");
+
+    return html;
+
+  }
+
+  function GenerateJPEG()
+  {
+    var html = d3.select(".linechart")
+      .attr("title", "linechartdiv")
+      .attr("version", 1.1)
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      .node().parentNode.innerHTML;
+
+    var imgsrc = 'data:image/svg+xml;base64,' + btoa(html);
+    var img = '<img src="' + imgsrc + '">';
+    //d3.select("#svgdataurl").html(img);
+
+    var canvas = document.querySelector("canvas"),
+      context = canvas.getContext("2d");
+
+    var image = new Image;
+    image.src = imgsrc;
+    image.onload = function ()
+    {
+
+      context.drawImage(image, 0, 0);
+
+      var canvasdata = canvas.toDataURL("image/jpg");
+
+      var pngimg = '<img src="' + canvasdata + '">';
+      //d3.select("#pngdataurl").html(pngimg);
+
+      var a = document.createElement("a");
+      a.download = "sample.jpg";
+      a.href = canvasdata;
+      a.click();
+    };
+  }
+
+
+  function ReadCSV()
+  {
+    var stringpath = document.getElementById("input-file").value;
+    return stringpath.slice(12);
+  }
+
+  function UpdateChartTitle(inputtext)
+  {
+    document.getElementById("linechartTitleID").innerHTML = inputtext;
+  }
+
+  function updateChart()
+  {
+    clearChart();
+
+    charts.getCSV(ReadCSV(), function (outputdata)
+    {
+
+      data = outputdata;
+
+      charts.chart.Linechart.Generate(data);
+
+    });
+
+  }
+
+  function clearChart()
+  {
+    d3.select(".line").remove();
+    d3.select(".overlay").remove();
+    d3.select(".overlay").remove();
+    d3.selectAll(".xAxis").remove();
+    d3.selectAll(".yAxis").remove();
+  }
+  </script>
+</body>
+
+</html>

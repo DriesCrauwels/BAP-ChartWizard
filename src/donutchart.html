@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>Donut Chart</title>
+
+  <!--CSS for every chart wizard-->
+  <link href="css/charts.css" rel="stylesheet" />
+
+  <!--jQuery UI-->
+  <link href="css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+
+  <!--Scrollbar-->
+  <link href="css/jquery.mCustomScrollbar.css" rel="stylesheet" />
+
+  <!--Main Menu-->
+  <link href="css/main-menu.css" rel="stylesheet" />
+
+  <!--Loading animation-->
+  <link href="css/loading-balls.css" rel="stylesheet" />
+
+  <!--Color picker-->
+  <link href="css/colorpicker.css" rel="stylesheet" />
+
+  <!--Icons-->
+  <link href="css/glyphicons.css" rel="stylesheet" />
+</head>
+
+<body>
+  <nav id="menu-wrap">
+    <div id="menu-trigger">Menu</div>
+    <ul id="menu">
+      <li id="disabled">&nbsp;</li>
+      <li><a href="home.html">Home</a>
+      </li>
+      <li> <a href="#">Charts <b class="caret"></b></a>
+        <ul>
+          <li><a href="areachart.html">Area Chart</a>
+          </li>
+          <li><a href="barchart.html">Bar Chart</a>
+          </li>
+          <li><a href="donutchart.html">Donut Chart</a>
+          </li>
+          <li><a href="">Bivariate Area Chart</a>
+          </li>
+          <li><a href="#">Grouped Bar Chart</a>
+          </li>
+          <li><a href="linechart.html">Line Chart</a>
+          </li>
+          <li><a href="#">Multi-Line Chart</a>
+          </li>
+          <li><a href="#">Pie Chart</a>
+          </li>
+          <li><a href="#">Scatterplot</a>
+          </li>
+        </ul>
+      </li>
+      <li><a href="infographic.html">Infographics</a>
+      </li>
+      <li><a href="jezuscampraptorravepage.html">Help</a>
+      </li>
+      <li><a href="#about">About</a>
+      </li>
+      <li><a href="#contact">Contact</a>
+      </li>
+  </nav>
+  <div id="small-menu">
+    <ul>
+      <li><a href="#" onClick="showDataDialog()">Data</a>
+      </li>
+      <li><a href="#" onClick="showRadiusDialog()">Radius</a>
+      </li>
+      <li><a href="#" onClick="showLabelsDialog()">Labels</a>
+      </li>
+      <li><a href="#" onClick="showColorsDialog()">Color</a>
+      </li>
+      <li><a href="#" onClick="showTextDialog()">Text</a>
+      </li>
+      <li><a href="#" onClick="showExportDialog()">Export</a>
+      </li>
+    </ul>
+  </div>
+
+  <div id="container">
+    <h2 id="piechartTitleID">Donut Chart</h2>
+    <div id="piechart-container" style="margin-top: 20px; margin-bottom: 50px">
+      <div class="piechartdiv" id="piechartdiv"></div>
+      <div id="value-container" style="width:100px; height:100px; padding:23px; position:relative; top:-230px; margin:0 auto;"> <span id="value"></span>
+      </div>
+      <canvas width="960" height="500" style="display:none"></canvas>
+    </div>
+  </div>
+
+  <div id="data-dialog" title="Data Settings" class="dialog">
+    <div class="btn-group">
+      <div class="fileinput fileinput-new" data-provides="fileinput">
+        <div class="input-group">
+          <input id="input-file" type="file" name="..." onChange="updateChart()">
+          <a id="csv-upload" href="#" class="btnz" data-dismiss="fileinput" onClick="clearChart()">Remove</a> 
+        </div>
+        <button type="button" class="btnz" onClick="updateChart()" style="margin-top:10px; margin-bottom:10px">Generate Chart</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="radius-dialog" title="Radius Settings" class="dialog">
+    <div class="row">
+      <div class="col-lg-6">
+        <p>Inner Radius</p>
+        <div id="inner-radius-slider"></div>
+      </div>
+      <div class="col-lg-6">
+        <p>Outer Radius</p>
+        <div id="outer-radius-slider"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="labels-dialog" title="Label Settings" class="dialog">
+    <p>Hide Outer Labels</p>
+    <input type="checkbox" onClick="charts.chart.Piechart.Generate.DisplayOuterLabels(this.checked)">
+  </div>
+
+  <div id="colors-dialog" title="Color Settings" class="dialog">
+    <div class="col-lg-6" style="margin-top: 20px; margin-bottom: 50px">
+      <h3>Color sets</h3>
+      <div class="row">
+        <div class="col-xs-6 col-md-4">
+          <a class="thumbnail" onClick="charts.chart.Piechart.Generate.UpdateColor('colorset',undefined,undefined,
+            ['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00'])">
+            <img src="images/piechart-colorset1-thumbnail.png">
+          </a>
+        </div>
+        <div class="col-xs-6 col-md-4">
+          <a class="thumbnail" onClick="charts.chart.Piechart.Generate.UpdateColor('colorset',undefined,undefined,
+            ['#153450','#294052','#447294','#8FBCDB','#F4D6BC','#F8E4CC'])">
+            <img src="images/piechart-colorset2-thumbnail.png">
+          </a>
+        </div>
+        <div class="col-xs-6 col-md-4">
+          <a class="thumbnail" onClick="charts.chart.Piechart.Generate.UpdateColor('colorset',undefined,undefined,
+            ['#A31E39','#485C5A','#8C9C9A','#9DB2B1','#BFCFCC','#D6E4E1'])">
+            <img src="images/piechart-colorset3-thumbnail.png">
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6" style="margin-top: 20px; margin-bottom: 50px">
+      <h3>Color gradient</h3>
+      <p style="margin-top:10px">Start Color</p>
+      <span style="height:64px; width:64px;">
+  				<div id="gradient-startcolor-picker" class="color-picker">
+  				<div style="background-color: #07FFC1;">
+                </div>
+                </div>
+                </span>
+      <p style="margin-top:10px">End Color</p>
+      <span style="height:64px; width:64px;">
+  				<div id="gradient-endcolor-picker" class="color-picker">
+  				<div style="background-color: #07FFC1;">
+                </div>
+                </div>
+                </span>
+    </div>
+  </div>
+
+  <div id="text-dialog" title="Text Settings" class="dialog">
+    <p>Chart Title</p>
+    <input id="chart-title" type="text" value="Donut Chart" class="form-input" onChange="UpdateChartTitle(this.value)">
+  </div>
+
+  <div id="export-dialog" title="Export" class="dialog">
+    <button type="button" class="btnz" onClick="GenerateSVG()">Export SVG</button>
+    <button type="button" class="btnz" onClick="GenerateHTML()">Export HTML</button>
+    <button type="button" class="btnz" onClick="GenerateJPEG()">Download PNG</button>
+  </div>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+  <!--D3 Library-->
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+
+  <!-- Some library for tooltips-->
+  <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+  <!---Custom chart wizard library-->
+  <script src="js/chartwizard-library.js"></script>
+
+  <!--JQuery UI -->
+  <script src="js/jquery-ui-1.10.4.js"></script>
+
+  <!--Color picker-->
+  <script type="text/javascript" src="js/colorpicker.js"></script>
+  <script>
+               
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////INITIALISATIONS////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+  var gradientstartcolor = '#FFF';
+  var gradientendcolor = '#000';
+
+  $(document).ready(function ()
+  {
+
+    //Get the CSV data, then generate the chart as callback
+    charts.getCSV("data2.csv", function (outputdata)
+    {
+
+      data = outputdata;
+
+      charts.chart("PieChart");
+      charts.chart.Piechart("#piechartdiv");
+      charts.chart.Piechart.Generate(data,
+        $("#outer-radius-slider").slider("value"),
+        $("#inner-radius-slider").slider("value")
+      );
+
+    });
+  });
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////JQUERY UI//////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  $(function ()
+  {
+    $("#outer-radius-slider").slider(
+    {
+      value: 1,
+      min: 0.25,
+      max: 1.25,
+      step: 0.01,
+      slide: function (event, ui)
+      {
+        $("#outer-radius-amount").val(ui.value);
+        charts.chart.Piechart.Generate.UpdateRadius($("#inner-radius-slider").slider("value"),
+          ui.value
+        );
+
+      }
+    });
+    $("#outer-radius-amount").val($("#outer-radius-slider").slider("value"));
+
+  });
+
+  $(function ()
+  {
+    $("#inner-radius-slider").slider(
+    {
+      value: 80,
+      min: 50,
+      max: 200,
+      step: 1,
+      slide: function (event, ui)
+      {
+        $("#inner-radius-amount").val(ui.value);
+        charts.chart.Piechart.Generate.UpdateRadius(ui.value,
+          $("#outer-radius-slider").slider("value")
+        );
+
+      }
+    });
+    $("#inner-radius-amount").val($("#inner-radius-slider").slider("value"));
+
+  });
+
+  //Dialogs
+
+  $(".btnz").button();
+
+  $('#data-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Import Your Data',
+    modal: false,
+    resizable: false,
+    height: 220,
+    width: 450
+  });
+
+  $('#radius-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Radius Settings',
+    modal: false,
+    resizable: false,
+    height: 220,
+    width: 450
+
+  });
+
+  $('#labels-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Label Settings',
+    modal: false,
+    resizable: false,
+    height: 220,
+    width: 450
+  });
+
+  $('#colors-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Color Settings',
+    modal: false,
+    resizable: false,
+    height: 380,
+    width: 850
+  });
+
+  $('#text-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Text Settings',
+    modal: false,
+    resizable: false,
+    height: 220,
+    width: 450
+  });
+
+  $('#export-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Export Your Chart',
+    modal: false,
+    resizable: false,
+    height: 220,
+    width: 450
+  });
+
+  function showDataDialog()
+  {
+    $("#data-dialog").dialog("open");
+  }
+
+  function showRadiusDialog()
+  {
+    $("#radius-dialog").dialog("open");
+  }
+
+  function showLabelsDialog()
+  {
+    $("#labels-dialog").dialog("open");
+  }
+
+  function showColorsDialog()
+  {
+    $("#colors-dialog").dialog("open");
+  }
+
+  function showTextDialog()
+  {
+    $("#text-dialog").dialog("open");
+  }
+
+  function showExportDialog()
+  {
+    $("#export-dialog").dialog("open");
+  }
+
+  $('#gradient-startcolor-picker').ColorPicker(
+  {
+    //Default value
+    color: '#000',
+    onShow: function (colpkr)
+    {
+      $(colpkr).fadeIn(500);
+      return false;
+    },
+    onHide: function (colpkr)
+    {
+      $(colpkr).fadeOut(500);
+      return false;
+    },
+    onChange: function (hsb, hex, rgb)
+    {
+      //Change color of country
+      charts.chart.Piechart.Generate.UpdateColor('colorgradient', "#" + hex, gradientendcolor);
+      //Update global variable
+      gradientstartcolor = "#" + hex;
+      //Change background of color picker
+      $('#gradient-startcolor-picker div').css('backgroundColor', '#' + hex);
+    }
+  });
+
+  $('#gradient-endcolor-picker').ColorPicker(
+  {
+    //Default value
+    color: '#000',
+    onShow: function (colpkr)
+    {
+      $(colpkr).fadeIn(500);
+      return false;
+    },
+    onHide: function (colpkr)
+    {
+      $(colpkr).fadeOut(500);
+      return false;
+    },
+    onChange: function (hsb, hex, rgb)
+    {
+      //Change color of country
+      charts.chart.Piechart.Generate.UpdateColor('colorgradient', gradientstartcolor, "#" + hex);
+      //Update global variable
+      gradientendcolor = "#" + hex;
+      //Change background of color picker
+      $('#gradient-endcolor-picker div').css('backgroundColor', '#' + hex);
+    }
+  });
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////JAVASCRIPT//////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  function GenerateSVG()
+  {
+    var html = d3.select(".piechart")
+      .attr("title", "piechartdiv")
+      .attr("version", 1.1)
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      .node().parentNode.innerHTML;
+
+    var newwindow = window.open('', 'name', 'height=400,width=1000');
+
+
+
+
+    var newwindowroot = d3.select(newwindow.document.body).append("div")
+      .attr("id", "SVG")
+      .append("img")
+      .attr("src", "data:image/svg+xml;base64," + btoa(html));
+  }
+
+  function GenerateHTML()
+  {
+    var html = d3.select("#piechartdiv")
+      .attr("title", "piechartdiv")
+      .attr("version", 1.1)
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      .node().parentNode.innerHTML;
+
+    var newwindow = window.open('', 'name', 'height=800,width=1100');
+
+    newwindow.document.write(html);
+    newwindow.document.write("<textarea style='width:100%; height:200px;'>");
+    newwindow.document.write(html);
+    newwindow.document.write("</textarea>");
+
+    return html;
+  }
+
+  function GenerateJPEG()
+  {
+    var html = d3.select(".piechart")
+      .attr("title", "piechartdiv")
+      .attr("version", 1.1)
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      .node().parentNode.innerHTML;
+
+    var imgsrc = 'data:image/svg+xml;base64,' + btoa(html);
+    var img = '<img src="' + imgsrc + '">';
+    //d3.select("#svgdataurl").html(img);
+
+    var canvas = document.querySelector("canvas"),
+      context = canvas.getContext("2d");
+
+    var image = new Image;
+    image.src = imgsrc;
+    image.onload = function ()
+    {
+      context.drawImage(image, 0, 0);
+
+      var canvasdata = canvas.toDataURL("image/jpg");
+
+      var pngimg = '<img src="' + canvasdata + '">';
+      //d3.select("#pngdataurl").html(pngimg);
+
+      var a = document.createElement("a");
+      a.download = "sample.jpg";
+      a.href = canvasdata;
+      a.click();
+    };
+  }
+
+  function getStartColorGradient()
+  {
+    var color = '#' + document.getElementById("startcolorgradient").value;
+    return color;
+  }
+
+  function getEndColorGradient()
+  {
+    var color = '#' + document.getElementById("endcolorgradient").value;
+    return color;
+  }
+
+  function ReadCSV()
+  {
+    var stringpath = document.getElementById("input-file").value;
+    return stringpath.slice(12);
+  }
+
+  function UpdateChartTitle(inputtext)
+  {
+    document.getElementById("piechartTitleID").innerHTML = inputtext;
+  }
+
+  function updateChart()
+  {
+    clearChart();
+
+    charts.getCSV(ReadCSV(), function (outputdata)
+    {
+      data = outputdata;
+
+      charts.chart.Piechart.Generate(data,
+        $("#outer-radius-slider").slider("value"),
+        $("#inner-radius-slider").slider("value")
+      );
+
+      d3.select("#value-container").style(
+      {
+        "display": ""
+      });
+
+    });
+
+  }
+
+  function clearChart()
+  {
+    d3.select(".donutchart-group .slices").remove();
+    d3.select(".donutchart-group .labels").remove();
+    d3.select(".donutchart-group .lines").remove();
+    d3.select("#value-container").style(
+    {
+      "display": "none"
+    });
+  }
+
+  </script>
+</body>
+
+</html>

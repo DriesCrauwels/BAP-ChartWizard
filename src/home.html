@@ -1,0 +1,169 @@
+<!DOCTYPE>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Infographics Wizard</title>
+
+  <!--Main CSS-->
+  <link href="css/home.css" rel="stylesheet" />
+
+  <!--Scrollbar-->
+  <link href="css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css" />
+
+  <!--Main Menu-->
+  <link href="css/main-menu.css" rel="stylesheet" type="text/css" />
+
+  <!--Loading anilmation-->
+  <link href="css/loading-balls.css" rel="stylesheet" type="text/css" />
+
+  <!--Icons-->
+  <link href="css/glyphicons.css" rel="stylesheet" />
+</head>
+
+<body style="background-color:#333">
+  <nav id="menu-wrap">
+    <div id="menu-trigger">Menu</div>
+    <ul id="menu">
+      <li id="disabled">&nbsp;</li>
+      <li><a href="home.html">Home</a>
+      </li>
+      <li> <a href="#">Charts <b class="caret"></b></a>
+        <ul>
+          <li><a href="areachart.html">Area Chart</a>
+          </li>
+          <li><a href="barchart.html">Bar Chart</a>
+          </li>
+          <li><a href="donutchart.html">Donut Chart</a>
+          </li>
+          <li><a href="#">Bivariate Area Chart</a>
+          </li>
+          <li><a href="#">Grouped Bar Chart</a>
+          </li>
+          <li><a href="linechart.html">Line Chart</a>
+          </li>
+          <li><a href="#">Multi-Line Chart</a>
+          </li>
+          <li><a href="#">Pie Chart</a>
+          </li>
+          <li><a href="#">Scatterplot</a>
+          </li>
+        </ul>
+      </li>
+      <li><a href="infographic.html">Infographics</a>
+      </li>
+      <li><a href="jezuscampraptorravepage.html">Help</a>
+      </li>
+      <li><a href="#about">About</a>
+      </li>
+      <li><a href="#contact">Contact</a>
+      </li>
+  </nav>
+  <div class="header">
+    <h1>Choose a chart</h1>
+  </div>
+  <div id="container" class="masonry js-masonry">
+
+    <div class="item w2 h2">
+      <h2>Area Chart</h2>
+      <a href="areachart.html">
+        <img src="images/areachart.png" </a>
+      </a>
+      <p>A chart that displays graphically quantitive data. It is based on the line chart.</p>
+    </div>
+    <div class="item w2 h2">
+      <h2>Bar Chart</h2>
+      <a href="barchart.html">
+        <img src="images/barchart.png" </a>
+      </a>
+      <p>A chart with rectangular bars with lengths proportional to the values that they represent.</p>
+    </div>
+    <div class="item w2 h2">
+      <h2>Donut Chart</h2>
+      <a href="donutchart.html">
+        <img src="images/thumbnail.png" </a>
+      </a>
+      <p>A chart identical to a pie chart, with the exception of a blank center and the ability to support multiple
+        statistics at once.</p>
+    </div>
+    <div class="item w2 h2">
+      <h2>Bivariate Area Chart</h2>
+      <a href="">
+        <img src="images/thumbnail.png" </a>
+      </a>
+      <p>A chart that shows how two variables interrelate in the form of an area</p>
+    </div>
+    <div class="item w2 h2">
+      <h2>Grouped Bar Chart</h2>
+      <a href="">
+        <img src="images/thumbnail.png" </a>
+      </a>
+      <p>A chart that displays multiple bars grouped together.</p>
+    </div>
+    <div class="item w2 h2">
+      <h2>Line Chart</h2>
+      <a href="linechart.html">
+        <img src="images/thumbnail.png" </a>
+      </a>
+      <p>A chart which displays information as a series of data points called 'markers' connected by straight line
+        segments.
+      </p>
+    </div>
+    <div class="item w2 h2">
+      <h2>Multi-Line Chart</h2>
+      <a href="">
+        <img src="images/thumbnail.png" </a>
+      </a>
+      <p>A chart which displays multiple y values for one given x value to create seperate lines.</p>
+    </div>
+    <div class="item w2 h2">
+      <h2>Pie Chart</h2>
+      <a href="">
+        <img src="images/thumbnail.png" </a>
+      </a>
+      <p>A circular chart divided into sectors, illustrating numerical proportion.</p>
+    </div>
+    <div class="item w2 h2">
+      <h2>Scatterplot</h2>
+      <a href="">
+        <img src="images/thumbnail.png" </a>
+      </a>
+      <p>A type of chart using Cartesian coordinates to display values for two variables for a set of data.</p>
+    </div>
+    <div class="item w4 h4">
+      <h2>Infographics</h2>
+      <a href="infographic.html">
+        <img src="images/thumbnail.png" </a>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="footer-wrapper">
+    <div id="footer">
+      Developed by Dries Crauwels
+    </div>
+  </div>
+        
+  <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+  <script type="text/javascript" src="js/jquery-ui-1.10.4.js"></script>
+  <script type="text/javascript" src="js/jquery.backstretch.min.js"></script>
+  <script type="text/javascript" src="js/masonry.pkgd.min.js"></script>
+        
+  <script type="text/javascript"> 
+  $(document).ready(function ()             
+  {
+    //Load the background image
+    $.backstretch("images/homebackground.png");
+
+
+    $('#container').masonry(
+    {
+      itemSelector: '.item',
+      containerStyle: null
+    });
+  });
+  </script>
+</body>
+
+</html>

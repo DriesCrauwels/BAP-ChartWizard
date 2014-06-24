@@ -1,0 +1,134 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*Loading animation*/
+#loading {
+
+position: absolute; left: 50%; top: 50%; z-index: 1000;
+}
+
+
+body {
+	
+font-family:"Segoe UI";
+color:	#CCC;
+background-color:#333;	
+}
+
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+/*Hide all dialogs by default*/
+.dialog {
+	
+display:none;	
+
+}
+
+
+.chart-container {
+	
+margin-top: 60px; 
+margin-bottom: 150px	;
+	
+}
+
+.title {
+	
+color:#CCC;	
+}
+
+
+#container {
+    width: 1100px;
+    margin: 0 auto;
+	margin-top: 40px;
+	
+}
+
+.btn-group {
+	
+margin-top:5px;
+margin-bottom:5px;
+	
+}
+
+.form-input {
+	
+border: 0;
+-webkit-appearance: none;
+-moz-appearance: none;
+width: 200px;
+text-indent: 0.01px;
+color: #FFF;
+border-radius: 3px;
+padding: 5px;
+box-shadow: inset 0 0 5px rgba(000,000,000, 0.5);
+background: #333;	
+	
+	
+}
+
+.form-select {
+	
+border: 0;
+-webkit-appearance: none;
+-moz-appearance: none;
+width: 200px;
+text-indent: 0.01px;
+color: #FFF;
+border-radius: 3px;
+padding: 5px;
+box-shadow: inset 0 0 5px rgba(000,000,000, 0.5);
+background: #333;	
+	
+	
+}
+
+/*Tooltip*/
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+	box-sizing: border-box;
+	display: inline;
+	font-size: 10px;
+	width: 100%;
+	line-height: 1;
+	color: rgba(0, 0, 0, 0.8);
+	content: "\25BC";
+	position: absolute;
+	text-align: center;
+}
+.d3-tip {
+	line-height: 1;
+	font-weight: bold;
+	padding: 12px;
+	background: rgba(0, 0, 0, 0.8);
+	color: #fff;
+	border-radius: 2px;
+}
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+	margin: -1px 0 0 0;
+	top: 100%;
+	left: 0;
+}
+
+
+
+.footer-wrapper {
+    background: rgba(0, 0, 0, 0.44);
+    margin-top: 60px;
+    -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.09);
+    -moz-box-shadow: 0 -1px 0 rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.09);
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.09);
+}
+#footer {
+    width: 1010px;
+    margin: 0 auto;
+    padding: 25px 0;
+    overflow: hidden;
+	color:#CCC;
+	text-align:center;
+}

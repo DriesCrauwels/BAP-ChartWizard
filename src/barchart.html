@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>Bar Chart</title>
+
+  <!--CSS for every chart wizard-->
+  <link href="css/charts.css" rel="stylesheet" />
+
+  <!--jQuery UI-->
+  <link href="css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+
+  <!--Scrollbar-->
+  <link href="css/jquery.mCustomScrollbar.css" rel="stylesheet" />
+
+  <!--Main Menu-->
+  <link href="css/main-menu.css" rel="stylesheet" />
+
+  <!--Loading animation-->
+  <link href="css/loading-balls.css" rel="stylesheet" />
+
+  <!--Color picker-->
+  <link href="css/colorpicker.css" rel="stylesheet" />
+
+  <!--Icons-->
+  <link href="css/glyphicons.css" rel="stylesheet" />
+</head>
+
+<body>
+  <nav id="menu-wrap">
+    <div id="menu-trigger">Menu</div>
+    <ul id="menu">
+      <li id="disabled">&nbsp;</li>
+      <li><a href="home.html">Home</a>
+      </li>
+      <li> <a href="#">Charts <b class="caret"></b></a>
+        <ul>
+          <li><a href="areachart.html">Area Chart</a>
+          </li>
+          <li><a href="barchart.html">Bar Chart</a>
+          </li>
+          <li><a href="donutchart.html">Donut Chart</a>
+          </li>
+          <li><a href="#">Bivariate Area Chart</a>
+          </li>
+          <li><a href="#">Grouped Bar Chart</a>
+          </li>
+          <li><a href="linechart.html">Line Chart</a>
+          </li>
+          <li><a href="#">Multi-Line Chart</a>
+          </li>
+          <li><a href="#">Pie Chart</a>
+          </li>
+          <li><a href="#">Scatterplot</a>
+          </li>
+        </ul>
+      </li>
+      <li><a href="infographic.html">Infographics</a>
+      </li>
+      <li><a href="jezuscampraptorravepage.html">Help</a>
+      </li>
+      <li><a href="#about">About</a>
+      </li>
+      <li><a href="#contact">Contact</a>
+      </li>
+  </nav>
+  <div id="small-menu">
+    <ul>
+      <li><a href="#" onClick="showDataDialog()">Data</a>
+      </li>
+      <li><a href="#" onClick="showAxesDialog()">Axes</a>
+      </li>
+      <li><a href="#" onClick="showMarginsDialog()">Margins</a>
+      </li>
+      <li><a href="#" onClick="showColorsDialog()">Colors</a>
+      </li>
+      <li><a href="#" onClick="showTextDialog()">Text</a>
+      </li>
+      <li><a href="#" onClick="showExportDialog()">Export</a>
+      </li>
+    </ul>
+  </div>
+
+  <div id="container">
+
+    <div id="barchart" class="chart-container">
+      <h2 id="barchartTitleID" class="title">Bar Chart</h2>
+      <div class="barchartdiv" id="barchartdiv"></div>
+
+      <button id="sortbars-byvalue" type="button" class="btnz" onClick="charts.chart.Barchart.Generate.SortbarsByValue();">Sort by Value</button>
+      <button id="sortbars-byname" type="button" class="btnz" onClick="charts.chart.Barchart.Generate.SortbarsByName()">Sort by Name</button>
+    </div>
+    <!--A canvas to copy the svg to when we're exporting it-->
+    <canvas width="960" height="500" style="display:none"></canvas>
+  </div>
+
+  <div id="data-dialog" title="Data Settings" class="dialog">
+    <div class="btn-group">
+      <div class="fileinput fileinput-new" data-provides="fileinput">
+        <div class="input-group">
+          <input id="input-file" type="file" name="..." onChange="updateChart()">
+          <a id="csv-upload" href="#" class="btnz" data-dismiss="fileinput" onClick="clearChart()">Remove</a> 
+        </div>
+        <button type="button" class="btnz btn-default" onClick="updateChart()" style="margin-top:10px; margin-bottom:10px">Generate Chart</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="axes-dialog" title="Axes Settings" class="dialog">
+    <div class="row">
+      <div class="col-lg-6">
+        <p>X Axis Name</p>
+        <input id="xaxis-name" type="text" class="form-input" placeholder="X Axis" onChange="charts.chart.Barchart.Generate.UpdateXaxisName(this.value)"
+        value="Name">
+      </div>
+      <div class="col-lg-6">
+        <p>Y Axis Name</p>
+        <input id="yaxis-name" type="text" class="form-input" placeholder="Y Axis" onChange="charts.chart.Barchart.Generate.UpdateYaxisName(this.value)"
+        value="Value">
+      </div>
+      <div class="row">
+        <div class="col-lg-8">
+          <p>Rotate X Axis' Values</p>
+          <input type="checkbox" onClick="charts.chart.Barchart.Generate.RotateXaxisValues(this.checked)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="colors-dialog" title="Color Settings" class="dialog">
+    <div class="col-lg-6">
+      <p>Main Bar Color</p>
+      <span style="height:64px; width:64px;">
+  <div id="bar-color-picker" class="color-picker">
+  <div style="background-color: steelblue;">
+  </div>
+  </div>
+  </span>
+    </div>
+    <div class="col-lg-6">
+      <p>Hover Bar Color</p>
+      <span style="height:64px; width:64px;">
+  <div id="bar-hover-color-picker" class="color-picker">
+  <div style="background-color: lightblue;">
+  </div>
+  </div>
+  </span>
+    </div>
+  </div>
+
+  <div id="text-dialog" title="Text Settings" class="dialog">
+    <p>Chart Title</p>
+    <input id="chart-title" type="text" value="Bar Chart" class="form-input" onChange="UpdateChartTitle(this.value)">
+  </div>
+
+  <div id="margins-dialog" title="Margin Settings" class="dialog">
+    <p>Margin between bars</p>
+    <div id="slider"></div>
+  </div>
+
+  <div id="export-dialog" title="Export Settings" class="dialog">
+    <button type="button" class="btnz" onClick="GenerateSVG()">Export SVG</button>
+    <button type="button" class="btnz" onClick="GenerateHTML()">Export HTML</button>
+    <button type="button" class="btnz" onClick="GenerateJPEG()">Download PNG</button>
+  </div>
+  </div>
+  </div>
+
+  <div class="footer-wrapper">
+    <div id="footer">Developed by Dries Crauwels</div>
+  </div>
+
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+  <!--D3 Library-->
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+
+  <!-- Some library for tooltips-->
+  <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+  <!---Custom chart wizard library-->
+  <script src="js/chartwizard-library.js"></script>
+
+  <!--JQuery UI -->
+  <script src="js/jquery-ui-1.10.4.js"></script>
+
+  <!--Color picker-->
+  <script type="text/javascript" src="js/colorpicker.js"></script>
+  <script>
+    
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////INITIALISATIONS////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+  var data = new Array();
+
+  var barcolor = "steelblue";
+  var barhovercolor = "lightblue";
+
+
+  $(document).ready(function ()
+  {
+
+    //Get the CSV data, then generate the chart as callback
+    charts.getCSV("data.csv", function (outputdata)
+    {
+
+      data = outputdata;
+
+      document.getElementById("barchart").style.visibility = 'visible';
+
+      charts.chart("BarChart");
+      charts.chart.Barchart(".barchartdiv");
+      charts.chart.Barchart.Generate(data,
+                                     barcolor,
+                                     barhovercolor,
+                                     document.getElementById("xaxis-name").value,
+                                     document.getElementById("yaxis-name").value,
+                                     $("#slider").slider("value")
+      								 );
+     });
+  });
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////JQUERY UI//////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  $(function ()
+  {
+    $("#slider").slider(
+    {
+      value: 2,
+      min: 0,
+      max: 10,
+      step: 1,
+      slide: function (event, ui)
+      {
+        $("#amount").val(ui.value);
+        charts.chart.Barchart.Generate(data,
+          barcolor,
+          barhovercolor,
+          document.getElementById("xaxis-name").value,
+          document.getElementById("yaxis-name").value, (ui.value)
+        );
+      }
+    });
+    $("#amount").val($("#slider").slider("value"));
+
+  });
+
+  $(".btnz").button();
+
+
+  $('#data-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Import Your Data',
+    modal: false,
+    resizable: false,
+    height: 220,
+    width: 450
+  });
+
+  $('#axes-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Axes Settings',
+    modal: false,
+    resizable: false,
+    height: 250,
+    width: 550
+  });
+
+  $('#margins-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Margin Settings',
+    modal: false,
+    resizable: false,
+    height: 220,
+    width: 450
+  });
+
+  $('#colors-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Color Settings',
+    modal: false,
+    resizable: false,
+    height: 290,
+    width: 450
+  });
+
+  $('#text-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Text Settings',
+    modal: false,
+    resizable: false,
+    height: 220,
+    width: 450
+  });
+
+  $('#export-dialog').dialog(
+  {
+    autoOpen: false,
+    title: 'Export Your Chart',
+    modal: false,
+    resizable: false,
+    height: 220,
+    width: 450
+  });
+
+  //Dialogs
+  function showDataDialog()
+  {
+    $("#data-dialog").dialog("open");
+  }
+
+  function showAxesDialog()
+  {
+    $("#axes-dialog").dialog("open");
+  }
+
+  function showMarginsDialog()
+  {
+    $("#margins-dialog").dialog("open");
+  }
+
+  function showColorsDialog()
+  {
+    $("#colors-dialog").dialog("open");
+  }
+
+  function showTextDialog()
+  {
+    $("#text-dialog").dialog("open");
+  }
+
+  function showExportDialog()
+  {
+    $("#export-dialog").dialog("open");
+  }
+
+  $('#bar-color-picker').ColorPicker(
+  {
+    //Default value
+    color: '#000',
+    onShow: function (colpkr)
+    {
+      $(colpkr).fadeIn(500);
+      return false;
+    },
+    onHide: function (colpkr)
+    {
+      $(colpkr).fadeOut(500);
+      return false;
+    },
+    onChange: function (hsb, hex, rgb)
+    {
+      //Change color of country
+      charts.chart.Barchart.Generate.UpdateBarColor("#" + hex);
+      //Update the global variable
+      barcolor = hex;
+      //Change background of color picker
+      $('#bar-color-picker div').css('backgroundColor', '#' + hex);
+
+    }
+  });
+
+  $('#bar-hover-color-picker').ColorPicker(
+  {
+    //Default value
+    color: '#000',
+    onShow: function (colpkr)
+    {
+      $(colpkr).fadeIn(500);
+      return false;
+    },
+    onHide: function (colpkr)
+    {
+      $(colpkr).fadeOut(500);
+      return false;
+    },
+    onChange: function (hsb, hex, rgb)
+    {
+      //Change color of country
+      charts.chart.Barchart.Generate.UpdateBarHoverColor('#' + hex)
+      //Update the global variable
+      barhovercolor = hex;
+      //Change background of color picker
+      $('#bar-hover-color-picker div').css('backgroundColor', '#' + hex);
+
+    }
+  });
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////JAVASCRIPT//////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  function GenerateSVG()
+  {
+    var html = d3.select(".barchart")
+      .attr("title", "barchart")
+      .attr("version", 1.1)
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      .node().parentNode.innerHTML;
+
+    var newwindow = window.open('', 'name', 'height=400,width=1000');
+
+
+
+
+    var newwindowroot = d3.select(newwindow.document.body).append("div")
+      .attr("id", "SVG")
+      .append("img")
+      .attr("src", "data:image/svg+xml;base64," + btoa(html));
+  }
+
+  function GenerateHTML()
+  {
+    var html = d3.select(".barchart")
+      .attr("title", "barchartdiv")
+      .attr("version", 1.1)
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      .node().parentNode.innerHTML;
+
+    var newwindow = window.open('', 'name', 'height=400,width=1000');
+
+    newwindow.document.write(html);
+    newwindow.document.write("<textarea>");
+    newwindow.document.write(html);
+    newwindow.document.write("</textarea>");
+
+    return html;
+
+  }
+
+  function GenerateJPEG()
+  {
+    var html = d3.select(".barchart")
+      .attr("title", "barchartdiv")
+      .attr("version", 1.1)
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      .node().parentNode.innerHTML;
+
+    var imgsrc = 'data:image/svg+xml;base64,' + btoa(html);
+    var img = '<img src="' + imgsrc + '">';
+    //d3.select("#svgdataurl").html(img);
+
+    var canvas = document.querySelector("canvas");
+    var context = canvas.getContext("2d");
+
+    //Clear the canvas incase we drew something on the canvas already from exporting before
+    // Store the current transformation matrix
+    context.save();
+
+    // Use the identity matrix while clearing the canvas
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Restore the transform
+    context.restore();
+
+    var image = new Image;
+    image.src = imgsrc;
+    image.onload = function ()
+    {
+
+      context.drawImage(image, 0, 0);
+
+      var canvasdata = canvas.toDataURL("image/jpg");
+
+      var pngimg = '<img src="' + canvasdata + '">';
+      //d3.select("#pngdataurl").html(pngimg);
+
+      var a = document.createElement("a");
+      a.download = "sample.jpg";
+      a.href = canvasdata;
+      a.click();
+    };
+  }
+
+  function ReadCSV()
+  {
+    var stringpath = document.getElementById("input-file").value;
+    return stringpath.slice(12);
+  }
+
+  function UpdateChartTitle(inputtext)
+  {
+    document.getElementById("barchartTitleID").innerHTML = inputtext;
+  }
+
+  function updateChart()
+  {
+    clearChart();
+
+    charts.getCSV(ReadCSV(), function (outputdata)
+    {
+      data = outputdata;
+
+
+      charts.chart.Barchart.Generate(data,
+        barcolor,
+        barhovercolor,
+        document.getElementById("xaxis-name").value,
+        document.getElementById("yaxis-name").value,
+        $("#slider").slider("value")
+      );
+
+      document.getElementById("sortbars-byname").textContent = "Sort by " + document.getElementById(
+        "xaxis-name").value;
+      document.getElementById("sortbars-byvalue").textContent = "Sort by " + document.getElementById(
+        "yaxis-name").value;
+    });
+
+  }
+
+  function clearChart()
+  {
+    d3.selectAll("rect").remove();
+    d3.selectAll(".xAxis text").remove();
+    d3.selectAll(".yAxis text").remove();
+  }
+  </script>
+</body>
+
+</html>

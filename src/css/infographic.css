@@ -1,0 +1,510 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/*The first part of the CSS resets all of the HTML elements to 0 padding, 0 margin, and makes sure that there are no list styles being accidentally applied to the UL. This will give us a solid starting point for our styles.*/
+#cssmenu ul,
+#cssmenu li,
+#cssmenu span,
+#cssmenu a {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  /*Always put all elements on top so the canvas doesn't cover the dropdowns*/
+  z-index:999;
+}
+/*Center the whole nav bar*/
+#cssmenu {
+	
+  width: 1200px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#cssmenu ul {
+
+    list-style-type: none;
+}
+
+#cssmenu li {
+	/*spacing between each menu item*/
+ 	margin-left:2px;
+	
+}
+/*Using a float: left; will get all the first level LI elements to stack horizontally.*/
+#cssmenu > ul > li {
+  float: left;
+}
+
+/*n order to hide the sub menu until we hover over it we need to apply a display: none; property to the second level UL elements. To show the sub menu use the :hover attribute to trigger a display: block;. This will cause the sub menu to reappear when the cursor hovers over its parent LI element.*/
+#cssmenu ul ul {
+  display: none;
+  position: absolute;
+  top: 36px;
+  left: -1px;
+  min-width: 100%;
+  text-align: center;  
+  *width: 100%; /* IE7 hack*/
+  
+}
+#cssmenu li:hover ul {
+  display: block;
+  
+}
+/*
+One of the consequences of floating all the first level LI left is that the containing UL will have a height of 0px which means we will not be able to apply styles to it. To fix this we will need to apply a method called Clearfix, which makes sure the main UL will clear the LI when they are all floated left. You can read more about Clearfixes here.
+*/
+
+#cssmenu:after,
+#cssmenu ul:after {
+  content: '';
+  display: block;
+  clear: both;
+  
+}
+
+#cssmenu a {
+  color: #07FFC1;
+  display: inline-block;
+  font-family: "Segoe UI";
+  font-size: 14px;
+  min-width: 35px;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 0 -1px 0 #333333;
+  
+  
+}
+.cssmenu-content {
+	
+	background-color:#333;	
+	
+}
+
+
+.cssmenu-bottom-line {
+	
+	/*height and width of the button*/
+height:37px;
+background: #ffffff;
+background: -moz-radial-gradient(center, ellipse cover, #ffffff 0%, #ffffff 25%, #07FFC1 66%, #545454 100%);
+background: -webkit-gradient(radial, center center, 0px, center center, 100%, , color-stop(0%, #ffffff), color-stop(25%, #ffffff), color-stop(66%, #07FFC1), color-stop(100%, #545454));
+background: -webkit-radial-gradient(center, ellipse cover, #ffffff 0%, #ffffff 25%, #07FFC1 66%, #545454 100%);
+background: -o-radial-gradient(center, ellipse cover, #ffffff 0%, #ffffff 25%, #07FFC1 66%, #545454 100%);
+background: -ms-radial-gradient(center, ellipse cover, #ffffff 0%, #ffffff 25%, #07FFC1 66%, #545454 100%);
+background: radial-gradient(ellipse at center, #ffffff 0%, #ffffff 25%, #07FFC1 66%, #545454 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#545454', GradientType=1 );
+
+}
+
+#cssmenu > ul > li.active a {
+	
+  background: -moz-linear-gradient(top, #646464 0%, #4a4a4a 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #646464), color-stop(100%, #4a4a4a));
+  background: -webkit-linear-gradient(top, #646464 0%, #4a4a4a 100%);
+  background: -o-linear-gradient(top, #646464 0%, #4a4a4a 100%);
+  background: -ms-linear-gradient(top, #646464 0%, #4a4a4a 100%);
+  background: linear-gradient(to bottom, #646464 0%, #4a4a4a 100%);
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#646464', endColorstr='#4a4a4a', GradientType=0);
+  box-shadow: inset 0 0 10px #222222, inset 0 10px 10px #222222;
+  -moz-box-shadow: inset 0 0 10px #222222, inset 0 10px 10px #222222;
+  -webkit-box-shadow: inset 0 0 10px #222222, inset 0 10px 10px #222222;
+  filter: none;
+
+
+}
+#cssmenu > ul > li.active a:hover {
+  background: -moz-linear-gradient(top, #646464 0%, #4a4a4a 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #646464), color-stop(100%, #4a4a4a));
+  background: -webkit-linear-gradient(top, #646464 0%, #4a4a4a 100%);
+  background: -o-linear-gradient(top, #646464 0%, #4a4a4a 100%);
+  background: -ms-linear-gradient(top, #646464 0%, #4a4a4a 100%);
+  background: linear-gradient(to bottom, #646464 0%, #4a4a4a 100%);
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#646464', endColorstr='#4a4a4a', GradientType=0);
+  filter: none;
+
+}
+#cssmenu > ul > li a {
+
+
+ -webkit-box-shadow:  inset 0px 0px 0px 1px #818181;
+  -moz-box-shadow:  inset 0px 0px 0px 1px #818181;
+  box-shadow:  inset 0px 0px 0px 1px #818181;
+  background: #4a4a4a url(images/grad_dark.png) repeat-x left top;
+  background: -moz-linear-gradient(top, #8a8a8a 0%, #707070 50%, #626262 51%, #787878 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #8a8a8a), color-stop(50%, #707070), color-stop(51%, #626262), color-stop(100%, #787878));
+  background: -webkit-linear-gradient(top, #8a8a8a 0%, #707070 50%, #626262 51%, #787878 100%);
+  background: -o-linear-gradient(top, #8a8a8a 0%, #707070 50%, #626262 51%, #787878 100%);
+  background: -ms-linear-gradient(top, #8a8a8a 0%, #707070 50%, #626262 51%, #787878 100%);
+  background: linear-gradient(to bottom, #8a8a8a 0%, #707070 50%, #626262 51%, #333 100%);
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#8a8a8a', endColorstr='#333', GradientType=0);
+  border-bottom: 1px solid #;
+  border-top: 1px solid #5d5d5d;
+  border-right: 1px solid #5d5d5d;
+  line-height: 34px;
+  padding: 0 35px;
+
+  
+
+}
+#cssmenu > ul > li a:hover {
+
+  background: -moz-linear-gradient(top, #646464 0%, #4a4a4a 50%, #3b3b3b 51%, #525252 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #646464), color-stop(50%, #4a4a4a), color-stop(51%, #3b3b3b), color-stop(100%, #525252));
+  background: -webkit-linear-gradient(top, #646464 0%, #4a4a4a 50%, #3b3b3b 51%, #525252 100%);
+  background: -o-linear-gradient(top, #646464 0%, #4a4a4a 50%, #3b3b3b 51%, #525252 100%);
+  background: -ms-linear-gradient(top, #646464 0%, #4a4a4a 50%, #3b3b3b 51%, #525252 100%);
+  background: linear-gradient(to bottom, #646464 0%, #4a4a4a 50%, #3b3b3b 51%, #525252 100%);
+
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#8a8a8a', endColorstr='#787878', GradientType=0);
+  filter: none;
+
+}
+/*The first button in the navbar*/
+#cssmenu > ul > li:first-child a {
+  border-radius: 1px 0 0 1px;
+  -moz-border-radius: 1px 0 0 1px;
+  -webkit-border-radius: 1px 0 0 1px;
+
+}
+/*The last button in the navbar*/
+#cssmenu > ul > li:last-child a {
+  border-radius: 0 1px 1px 0;
+  -moz-border-radius: 0 1px 1px 0;
+  -webkit-border-radius: 0 1px 1px 0;
+}
+/*Disable the hovering effect*/
+#cssmenu .disabled:hover {
+	
+ -webkit-box-shadow:  inset 0px 0px 0px 1px #818181;
+  -moz-box-shadow:  inset 0px 0px 0px 1px #818181;
+  box-shadow:  inset 0px 0px 0px 1px #818181;
+  background: #4a4a4a url(images/grad_dark.png) repeat-x left top;
+  background: -moz-linear-gradient(top, #8a8a8a 0%, #707070 50%, #626262 51%, #787878 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #8a8a8a), color-stop(50%, #707070), color-stop(51%, #626262), color-stop(100%, #787878));
+  background: -webkit-linear-gradient(top, #8a8a8a 0%, #707070 50%, #626262 51%, #787878 100%);
+  background: -o-linear-gradient(top, #8a8a8a 0%, #707070 50%, #626262 51%, #787878 100%);
+  background: -ms-linear-gradient(top, #8a8a8a 0%, #707070 50%, #626262 51%, #787878 100%);
+  background: linear-gradient(to bottom, #8a8a8a 0%, #707070 50%, #626262 51%, #333 100%);
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#8a8a8a', endColorstr='#333', GradientType=0);	
+}
+
+#cssmenu li ul li {
+  text-align: center;
+  /*Blue line at the end*/
+  border: 3px solid #000;
+  
+}
+
+#cssmenu li ul li a {
+	
+
+  display: block;
+  line-height: 120%;
+  padding: 9px 5px;
+  text-align: left;
+  background:#333;
+}
+
+
+
+
+#svg-container {
+	/*Center that bitch*/
+	position: absolute;
+	left: 50%;
+	margin-top:40px;
+	/*Minus half the width of the container*/ 
+	margin-left:-550px;
+	width:1100px;
+	height:800px;
+	border: 1px solid #999;
+  	font-family:"Segoe UI";
+	 color: #fff;
+	
+ 	/*Make sure it does NOT stay in the background or you won't be able to drag but it has to otherwise the modals wont
+	pop up correctly sooooooooooo need to change the Z-index to a positive value in the code*/
+	z-index:-1;
+ 
+ 
+}
+
+/*Hide all dialogs by default*/
+.modalDialog {
+
+	font-family:"Segoe UI Light";
+	color:#FFF;
+	top: 100px;
+	right: 0;
+	left: 0;
+	background: rgba(0,0,0,0.4);
+	opacity:0;
+	-webkit-transition: opacity 400ms ease-in;
+	-moz-transition: opacity 400ms ease-in;
+	transition: opacity 400ms ease-in;
+	pointer-events: none;
+}
+.modalDialog {
+	
+z-index: 999;
+position:absolute;
+top:0px;
+	
+}
+.modalDialog:target {
+	opacity:1;
+	pointer-events: auto;
+}
+.modalDialog > div {
+
+	position: relative;
+	margin-left: auto;
+	margin-right:auto;
+	margin-top:100px;
+	margin-bottom:100px;
+	padding: 5px 20px 13px 20px;
+	border-radius: 3px;
+	border: 1px solid #CCC;
+	background: #000;
+}
+.close {
+	background: #606061;
+	color: #FFFFFF;
+	line-height: 25px;
+	position: absolute;
+	right: -12px;
+	text-align: center;
+	top: -10px;
+	width: 24px;
+	text-decoration: none;
+	font-weight: bold;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
+	-moz-box-shadow: 1px 1px 3px #000;
+	-webkit-box-shadow: 1px 1px 3px #000;
+	box-shadow: 1px 1px 3px #000;
+}
+
+.close:hover { background: #F00 }
+
+.color-picker {
+position: relative;
+width: 36px;
+height: 36px;
+background: url(../images/select.png);
+}
+.color-picker div {
+position: absolute;
+top: 3px;
+left: 3px;
+width: 28px;
+height: 28px;
+background: url(../images/select.png) center;
+}
+
+/*This will set the actual size of the content of the dialog, the outer div must always be full size*/
+#countries-dialog > div{
+
+	margin:80px;	
+	
+}
+
+/*This will set the actual size of the content of the dialog, the outer div must always be full size*/
+#progress-bars-dialog > div{
+
+	margin:80px;
+	
+}
+/*This will set the actual size of the content of the dialog, the outer div must always be full size*/
+#figures-dialog > div{
+
+	margin:80px;
+	
+}
+/*This will set the actual size of the content of the dialog, the outer div must always be full size*/
+#icons-dialog > div {
+
+	margin:80px;
+	
+}
+
+#text-dialog > div {
+	
+	margin:80px;
+	
+}
+
+#donut-chart-dialog > div {
+	
+	margin:80px;
+	
+}
+
+#cke_textEditor {
+
+	margin-top:12px;	
+	
+}
+
+
+/*This will set the actual size of the content of the dialog, the outer div must always be full size*/
+#countries-menu {
+	
+		border: 0 ;  /*Removes border*/
+		-webkit-appearance: none;  /*Removes default chrome and safari style*/
+		-moz-appearance: none; /* Removes Default Firefox style*/ 
+		width: 200px; /*Width of select dropdown to give space for arrow image*/
+		text-indent: 0.01px; /* Removes default arrow from firefox*/
+		text-overflow: "";  /*Removes default arrow from firefox*/ /*My custom style for fonts*/
+		color: #FFF;
+		border-radius: 3px;
+		padding: 5px;
+		box-shadow: inset 0 0 5px rgba(000,000,000, 0.5);
+		background:#333;
+}
+#country-scale-menu {
+			border: 0 ;  /*Removes border*/
+		-webkit-appearance: none;  /*Removes default chrome and safari style*/
+		-moz-appearance: none; /* Removes Default Firefox style*/
+		width: 200px; /*Width of select dropdown to give space for arrow image*/
+		text-indent: 0.01px; /* Removes default arrow from firefox*/
+		text-overflow: "";  /*Removes default arrow from firefox*/ /*My custom style for fonts*/
+		color: #FFF;
+		border-radius: 3px;
+		padding: 5px;
+		box-shadow: inset 0 0 5px rgba(000,000,000, 0.5);
+		background:#333;
+	
+}
+
+#country-container {
+	
+	margin-top:20px;
+}
+
+
+
+.icons-menu-list {
+box-sizing: border-box;
+color: rgb(51, 51, 51);
+display: block;
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 20px;
+list-style-image: none;
+list-style-position: outside;
+list-style-type: none;
+}
+.icons-menu-list span{
+webkit-font-smoothing: antialiased;
+box-sizing: border-box;
+color: #999;
+display: inline-block;
+font-family: 'Glyphicons Halflings';
+font-size: 24px;
+font-style: normal;
+font-weight: normal;
+height: 24px;
+line-height: 24px;
+list-style-image: none;
+list-style-position: outside;
+list-style-type: none;
+margin-bottom: 10px;
+margin-top: 5px;
+position: relative;
+text-align: center;
+top: 1px;
+width: 24px;
+
+}
+
+.icons-menu-list li{
+	
+	
+background-color: #000;
+border-color: #000;
+border-bottom-style: solid;
+border-bottom-width: 1px;
+border-image-outset: 0px;
+border-image-repeat: stretch;
+border-image-slice: 100%;
+border-image-source: none;
+border-image-width: 1;
+border-left-style: solid;
+border-left-width: 1px;
+border-right-style: solid;
+border-right-width: 1px;
+border-top-style: solid;
+border-top-width: 1px;
+box-sizing: border-box;
+display: list-item;
+float: left;
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+font-size: 12px;
+height: 64px;
+line-height: 16.799999237060547px;
+list-style-image: none;
+list-style-position: outside;
+list-style-type: none;
+padding-bottom: 10px;
+padding-left: 10px;
+padding-right: 10px;
+padding-top: 10px;
+text-align: center;
+width: 64px;
+}
+
+.icons-menu-list li:hover {
+	background-color: #666;
+		
+}
+
+.icons-menu{
+	
+	height: 300px;
+overflow: auto;
+
+	box-sizing: border-box;
+color: rgb(51, 51, 51);
+display: block;
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 20px;
+margin-bottom: 20px;
+margin-left: 0px;
+margin-right: 0px;
+margin-top: 0px;
+overflow-x: hidden;
+overflow-y: hidden;
+}
+.icons-menu h1 {font-size: 1.5em; margin: 0; padding: 0;}
+
+
+#icons-settings-table {
+
+ margin:5px;	
+	
+}
+#icons-settings-table th {
+	
+	text-align:center;	
+	
+}
+#icons-group
+{
+	border: 1px solid #CCC;
+	padding: 5px;
+	min-height: 70px;
+	width: 99%;
+	margin-bottom:10px;
+}
+
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+.grid path {
+      stroke-width: 1px;
+}
